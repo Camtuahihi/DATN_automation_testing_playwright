@@ -1,0 +1,689 @@
+{
+  "cookies": [
+    {
+      "name": "browser_fingerprint",
+      "value": "fp_h1wqq6_qzb5",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1809640902,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "fingerprint_created",
+      "value": "2026-05-06T22:01:42.210Z",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1809640902,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.1424015366.1778104903",
+      "domain": ".aibat.vn",
+      "path": "/",
+      "expires": 1812664906.364563,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gcl_au",
+      "value": "1.1.1382818350.1778104903",
+      "domain": ".aibat.vn",
+      "path": "/",
+      "expires": 1785880903,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "IDE",
+      "value": "AHWqTUkYxDRh9MNG9jccCQOPbfzeG0IRNty0VkT3q_jhRPXyn6jGGwgvWTNsa9nL",
+      "domain": ".doubleclick.net",
+      "path": "/",
+      "expires": 1812664902.950566,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "token",
+      "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmFpYmF0LnZuL2FwaS9sb2dpbiIsImlhdCI6MTc3ODEwNDkwNCwiZXhwIjoxODA5NjQwOTA0LCJuYmYiOjE3NzgxMDQ5MDQsImp0aSI6ImxOMm02STlINXlWZ1dFMUUiLCJzdWIiOiIxOTUzMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NUDg-UtC6GetBKzmLUlmVB09wLEHCp8FNDNbXWCernE",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.513891,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "businessId",
+      "value": "12",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.514239,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "expires_in",
+      "value": "5298048000",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.514483,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "userId",
+      "value": "19533",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.514598,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "phone",
+      "value": "0396486486",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.514705,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "money",
+      "value": "0",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.514815,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "type",
+      "value": "2",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.514926,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "money_sub",
+      "value": "0",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.515485,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "referral",
+      "value": "null",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.515895,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "vatAll",
+      "value": "null",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.516092,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "name",
+      "value": "C%C3%A0%20ph%C3%AA%2C%20%C4%91%E1%BB%93%20u%E1%BB%91ng",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.516323,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "is_first_login",
+      "value": "false",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.516615,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "expired_date",
+      "value": "2026-11-14",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.518608,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "using_days",
+      "value": "191",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.519601,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "userActiveCode",
+      "value": "A99",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.520786,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "email",
+      "value": "",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.520882,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "apiKey",
+      "value": "b66b8d0b-807e-4882-ad4f-e24531519c13",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.520919,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "weekend_api_key",
+      "value": "",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521003,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "codeOrderHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.52126,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "customerNameHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521362,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "skuHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521419,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "productNameHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521477,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "quantityHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521534,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "totalCostHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521586,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "customerPaymentHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521638,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "debtHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521689,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "dateHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521742,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "statusHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521818,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "codeBuyHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.52191,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "supplierBuyHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.521963,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "monneyBuyHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522018,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "statusBuyHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522074,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "dateBuyHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.52213,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "productNameBuyHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522463,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "quantityBuyHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522532,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "codeProductHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522635,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "nameProductHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522699,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "categoryProductHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522757,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "dateProductHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522815,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "dateUpdateProductHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522873,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "statusProductHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522931,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "imageProductHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.522992,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "showSkuHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523082,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "showNameHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523159,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "showOpeningHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523229,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "showImportedHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523289,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "showExportedHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523345,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "showEndingHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523401,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "showPriceHeader",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523455,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "customerSetting",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.52351,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "discountProductSetting",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523614,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "discountSetting",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523699,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "vatSetting",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523755,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "is_management",
+      "value": "false",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523814,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "strPermission",
+      "value": "%2Cview_all_supplier%2Ccreate_supplier%2Cdelete_supplier%2Cview_all_category%2Ccreate_category%2Cdelete_category%2Cview_all_product%2Ccreate_product%2Cdelete_product%2Clist_order%2Cupdate_status_order%2Cupdate_order%2Ccreate_order%2Cdelete_order%2Clist_storage%2Clist_product_storage%2Cdetail_product%2Cupdate_product%2Cdetail_order%2Cview_all_brand%2Ccreate_brand%2Cdelete_brand%2Clist_dashboard_report%2Clist_aggregate_report%2Ccreate_receipt_rp%2Ccreate_payment_rp%2Clist_payment_rp%2Clist_receipt_rp%2Clist_receipt_type%2Ccreate_receipt_type%2Cupdate_receipt_type%2Cdetail_receipt_type%2Cdelete_receipt_type%2Clist_employee%2Ccreate_employee%2Cupdate_employee%2Cdetail_employee%2Cdelete_employee%2Cgenerate_barcode_product%2Clist_inventories%2Ccreate_inventories%2Cdetail_inventories%2Cupdate_inventories%2Cdelete_inventories%2Clist_receipt_payment_report%2Clist_profit_loss_report%2Cprint_inventories%2Cin_payment_rp%2Cin_receipt_rp%2Cview_all_customeg%2Ccreate_customeg%2Cupdate_customeg%2Cdetail_customeg%2Cdelete_customeg%2Clist_storage_report%2Clist_area%2Ccreate_area%2Cupdate_area%2Cdelete_area%2Clist_room%2Ccreate_room%2Cupdate_room%2Cdelete_room%2Clist_group_customers%2Ccreate_group_customers%2Cupdate_group_customers%2Cdelete_group_customers%2Clist_notify%2Cdetail_notify%2Cservice_config%2Cview_base_cost_product%2Cview_entry_cost_product%2Cview_wholesale_cost_product%2Cview_retail_cost_product%2Cdetail_ordesbuy%2Clist_ordesbuy%2Cupdate_status_ordesbuy%2Cupdate_ordesbuy%2Ccreate_ordesbuy%2Cdelete_ordesbuy%2Cconfig_work%2Cview_work%2Clist_theme%2Ccreate_theme%2Ccreate_refund_order%2Ccreate_refund_ordesbuy%2Cupdate_cost_inventories%2Clist_supplier_report%2Clist_customer_report%2Cdebt_customeg%2Clist_task%2Ccreate_task%2Cupdate_task%2Ccreate_location%2Cview_all_open_customeg%2Clist_rules%2Ccreate_rules%2Cdelete_rules%2Cschedule_visit%2Clist_profit_report%2Clist_shifts%2Copen_shifts%2Cclose_shifts%2Csummary_shifts%2Ccreate_commission_by_product%2Ctransfer_storage%2Cedit_success_order%2Cke_khai_thue_report%2Ccancel_order%2Ctotal_price_all_product%2C",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523874,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "strRole",
+      "value": "%2CDEFAULT%2C",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.523999,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "selectedInvoiceType",
+      "value": "2",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.526927,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "storeId",
+      "value": "-1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.638447,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "shiftsSetting",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.646728,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "is_odd_price",
+      "value": "1",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.647209,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "unit_price",
+      "value": "%C4%91%E1%BB%93ng",
+      "domain": "web.aibat.vn",
+      "path": "/",
+      "expires": 1812664904.647388,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_1DZBXXN9G7",
+      "value": "GS2.1.s1778104902$o1$g1$t1778104906$j56$l0$h0",
+      "domain": ".aibat.vn",
+      "path": "/",
+      "expires": 1812664906.36277,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://web.aibat.vn",
+      "localStorage": [
+        {
+          "name": "_gcl_ls",
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1778104902555},\"expires\":1785880902555}}"
+        },
+        {
+          "name": "app_state",
+          "value": "{\"AppBase\":{\"token\":\"\"}}"
+        }
+      ]
+    }
+  ]
+}

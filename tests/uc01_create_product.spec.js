@@ -17,13 +17,13 @@ test.describe('A. Kiểm tra giao diện', () => {
       await pp.openCreateForm();
 
       await expect(pp.formContainer).toBeVisible();
-      // Kiểm tra section headers thực tế trong form
+      // section headers thực tế trong form
       await expect(pp.formContainer.locator('text=Thông tin chung').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Giá sản phẩm').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=VAT').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Chính sách giá').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Thông tin bổ sung').first()).toBeVisible();
-      // Quản lý nâng cao = khu vực checkbox (không có section header riêng)
+      // Quản lý nâng cao
       await expect(pp.formContainer.locator('text=Sản phẩm Imei').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Sản phẩm combo').first()).toBeVisible();
       // Tên sản phẩm có dấu (*) bắt buộc
@@ -34,7 +34,6 @@ test.describe('A. Kiểm tra giao diện', () => {
   test('CP_TC_02 - Người dùng không có quyền không thấy nút Thêm sản phẩm @high @security',
     async ({ page }) => {
       // Precondition: cần tài khoản nhân viên không có quyền Tạo sản phẩm
-      // TC này cần BA cung cấp tài khoản riêng — hiện skip
       test.skip(true, 'Cần tài khoản nhân viên không có quyền Tạo sản phẩm');
       const pp = new ProductPage(page);
       await pp.open();
@@ -130,7 +129,6 @@ test.describe('C. Validation SKU & Barcode', () => {
     await pp.fillName(TD.uniqueName('ABC'));
     await pp.fillSku(TD.EXISTING_DATA.duplicateSKU);
     await pp.save();
-    // Kiểm tra thông báo đúng theo nghiệp vụ
     await expect(page.locator('text=sku Đã tồn tại')).toBeVisible();
 });
 
@@ -148,14 +146,10 @@ test.describe('C. Validation SKU & Barcode', () => {
 
     test('CP_TC_11 - Tạo sản phẩm thành công với SKU 255 ký tự @medium @boundary',
     async ({ page }) => {
-      // Tạo tiền tố unique dựa trên thời gian (thường là 13 ký tự số)
       const prefix = Date.now().toString(); 
       
-      // Tạo phần còn lại sao cho tổng chiều dài đúng 255 ký tự
-      // Ta lấy 255 trừ đi độ dài của prefix, sau đó lấp đầy bằng ký tự 'A' hoặc ngẫu nhiên
       const sku255 = prefix + 'A'.repeat(255 - prefix.length);
 
-      // Kiểm tra lại độ dài để đảm bảo luôn là 255
       expect(sku255.length).toBe(255);
 
       await pp.fillName(TD.uniqueName('ABC'));
@@ -167,7 +161,6 @@ test.describe('C. Validation SKU & Barcode', () => {
 
   test('CP_TC_12 - Tạo sản phẩm thất bại với SKU 256 ký tự (vượt biên) @medium @boundary',
     async ({ page }) => {
-      // App hiện tại lưu được SKU 256 ký tự mà không báo lỗi → cần backend fix
       const sku256 = TD.randomString(256);
       expect(sku256.length).toBe(256);
       await pp.fillName(TD.uniqueName('ABC'));
@@ -192,7 +185,6 @@ test.describe('D. Validation trọng lượng & đơn vị', () => {
   test(
     'CP_TC_13 - Chặn nhập ký tự không phải số tại trường Trọng lượng @medium @validation',
     async ({ page }) => {
-      // BUG: UI không filter ký tự — value giữ nguyên 'as12@' thay vì '12'
       await pp.weightInput.pressSequentially('as12@');
       await expect(pp.weightInput).toHaveValue('12');
     }
@@ -201,21 +193,17 @@ test.describe('D. Validation trọng lượng & đơn vị', () => {
   test(
     'CP_TC_14 - Trọng lượng thập phân: lưu và hiển thị đồng bộ giữa DB và UI @high @functional',
     async ({ page }) => {
-      //BUG: DB lưu 12.5 nhưng UI Chi tiết hiển thị 12
       await pp.fillName(TD.uniqueName('ABC'));
       // await pp.fillName('ABC');
       await pp.fillWeight('12.5');
       await pp.save();
       await pp.expectSuccessToast();
-      // Mở lại chi tiết để kiểm tra
       await pp.open();
-      // TODO: mở chi tiết sản phẩm vừa tạo và verify weight = '12.5'
     }
   );
 
   test('CP_TC_15 - Đơn vị trọng lượng cho phép chọn từ dropdown (g, kg, ml, l) @low @ui',
     async ({ page }) => {
-      // Vuetify combobox: click input để mở dropdown, options nằm trong .v-list-item
       await pp.weightUnitSelect.click();
       const listItems = page.locator('.v-menu__content .v-list-item, .menuable__content__active .v-list-item');
       await listItems.first().waitFor({ state: 'visible', timeout: 5000 });
@@ -262,43 +250,16 @@ test.describe('E. Validation chiết khấu & hoa hồng', () => {
     }
   );
 
-  // test('CP_TC_18 - Chiết khấu loại Đ không được lớn hơn Giá nhập @high @functional',
-  //   async ({ page }) => {
-  //     await pp.fillBaseCost('10000');
-  //     await pp.selectDiscountTypeDong();
-  //     await pp.fillDiscount('30000');
-  //     await pp.discountInput.press('Tab');
-  //     const errVisible = await page.locator('text=Chiết khấu không được lớn hơn giá vốn sản phẩm').first().isVisible({ timeout: 3000 }).catch(() => false);
-  //     if (!errVisible) { await pp.save(); }
-  //     await expect(
-  //       page.locator('text=Chiết khấu không được lớn hơn giá vốn sản phẩm').first()
-  //     ).toBeVisible();
-  //   }
-  // );
-
-    test('CP_TC_18 - Chiết khấu loại Đ không được lớn hơn Giá nhập @high @functional',
-      async ({ page }) => {
-        await pp.fillBaseCost('50000'); 
-        await pp.selectDiscountTypeDong(); 
-        await pp.fillDiscount('60000');
-        await pp.discountInput.press('Tab');
-        const errorMsg = page.locator(':text-matches("Chiết khấu|giá vốn|lớn hơn", "i")').first();  
-        await expect(errorMsg).toBeVisible({ timeout: 5000 });
-      }
-    );
-
-  // test('CP_TC_19 - Hoa hồng loại % không cho nhập > 100 @high @boundary',
-  //   async ({ page }) => {
-  //     await pp.selectCommissionTypePercent();
-  //     await pp.fillCommission('120');
-  //     await pp.commissionInput.press('Tab');
-  //     const errVisible = await page.locator('text=Hoa hồng không được lớn hơn 100%').first().isVisible({ timeout: 3000 }).catch(() => false);
-  //     if (!errVisible) { await pp.save(); }
-  //     await expect(
-  //       page.locator('text=Hoa hồng không được lớn hơn 100%').first()
-  //     ).toBeVisible();
-  //   }
-  // );
+  test('CP_TC_18 - Chiết khấu loại Đ không được lớn hơn Giá nhập @high @functional',
+    async ({ page }) => {
+      await pp.fillBaseCost('50000'); 
+      await pp.selectDiscountTypeDong(); 
+      await pp.fillDiscount('60000');
+      await pp.discountInput.press('Tab');
+      const errorMsg = page.locator(':text-matches("Chiết khấu|giá vốn|lớn hơn", "i")').first();  
+      await expect(errorMsg).toBeVisible({ timeout: 5000 });
+    }
+  );
 
   test('CP_TC_19 - Hoa hồng loại % không cho nhập > 100 @high @boundary', async ({ page }) => {
       await pp.selectCommissionTypePercent(); // Chọn loại hoa hồng %
@@ -307,20 +268,6 @@ test.describe('E. Validation chiết khấu & hoa hồng', () => {
       const errorHint = page.locator(':text-matches("Hoa hồng|100", "i")').first();
       await expect(errorHint).toBeVisible({ timeout: 3000 });
   });
-  
-  // test('CP_TC_20 - Hoa hồng loại Đ không được lớn hơn Giá nhập @high @functional',
-  //   async ({ page }) => {
-  //     await pp.fillBaseCost('10000');
-  //     await pp.selectCommissionTypeDong();
-  //     await pp.fillCommission('30000');
-  //     await pp.commissionInput.press('Tab');
-  //     const errVisible = await page.locator('text=Hoa hồng không được lớn hơn giá vốn sản phẩm').first().isVisible({ timeout: 3000 }).catch(() => false);
-  //     if (!errVisible) { await pp.save(); }
-  //     await expect(
-  //       page.locator('text=Hoa hồng không được lớn hơn giá vốn sản phẩm').first()
-  //     ).toBeVisible();
-  //   }
-  // );
 
   test('CP_TC_20 - Hoa hồng loại Đ không được lớn hơn Giá nhập @high @functional', async ({ page }) => {
       await pp.fillBaseCost('100000');
@@ -343,25 +290,7 @@ test.describe('F. Validation các trường giá', () => {
     await pp.openCreateForm();
   });
 
-  // test('CP_TC_21 - Chặn nhập ký tự không hợp lệ tại các ô nhập giá @high @validation',
-  //   async ({ page }) => {
-  //     await pp.baseCostInput.fill('1a@');
-  //     await expect(pp.baseCostInput).toHaveValue('1');
-
-  //     await pp.retailCostInput.fill('2a@');
-  //     await expect(pp.retailCostInput).toHaveValue('2');
-
-  //     await pp.wholesaleCostInput.fill('3a@');
-  //     await expect(pp.wholesaleCostInput).toHaveValue('3');
-
-  //     await pp.commissionInput.fill('4a@');
-  //     await expect(pp.commissionInput).toHaveValue('4');
-
-  //     await pp.vatInput.fill('5a@');
-  //     await expect(pp.vatInput).toHaveValue('5');
-  //   }
-  // );
-    test('CP_TC_21 - Chặn nhập ký tự không hợp lệ tại các ô nhập giá @high @validation',
+  test('CP_TC_21 - Chặn nhập ký tự không hợp lệ tại các ô nhập giá @high @validation',
     async ({ page}) => {
       await pp.baseCostInput.click();//giá nhập
       await pp.baseCostInput.pressSequentially('1a@');
@@ -404,32 +333,8 @@ test.describe('F. Validation các trường giá', () => {
     }
   );
 
-  // test('CP_TC_24 - Chặn nhập giá trị âm tại các ô giá @high @boundary',
-  //     async ({ page }) => {
-  //     await pp.baseCostInput.click();
-  //     await pp.baseCostInput.pressSequentially('-');
-  //     await expect(pp.baseCostInput).toHaveValue('');
-
-  //     await pp.retailCostInput.click();
-  //     await pp.retailCostInput.pressSequentially('-');
-  //     await expect(pp.retailCostInput).toHaveValue('');
-
-  //     await pp.wholesaleCostInput.click();
-  //     await pp.wholesaleCostInput.pressSequentially('-');
-  //     await expect(pp.wholesaleCostInput).toHaveValue('');
-
-  //     // await pp.commissionInput.click();
-  //     // await pp.commissionInput.pressSequentially('-');
-  //     // await expect(pp.commissionInput).toHaveValue('');
-
-  //     // await pp.vatInput.click();
-  //     // await pp.vatInput.pressSequentially('-');
-  //     // await expect(pp.vatInput).toHaveValue('');
-  //     }
-  //   );
 
   test('CP_TC_24 - Chặn nhập giá trị âm tại các ô giá @high @boundary', async ({ page }) => {
-    // Danh sách các locator cần kiểm tra
     const priceInputs = [
       { name: 'Giá vốn', locator: pp.baseCostInput },
       { name: 'Giá bán lẻ', locator: pp.retailCostInput },
@@ -437,17 +342,11 @@ test.describe('F. Validation các trường giá', () => {
     ];
 
     for (const item of priceInputs) {
-      // 1. Click 3 lần để bôi đen và xóa sạch giá trị mặc định (tránh bị dính số 0)
       await item.locator.click({ clickCount: 3 });
       await page.keyboard.press('Backspace');
-
-      // 2. Thử gõ dấu trừ '-'
       await item.locator.pressSequentially('-');
-      
-      // 3. Đợi mask xử lý ký tự
       await page.waitForTimeout(200);
 
-      // 4. XÁC NHẬN: Ô input phải rỗng HOẶC bằng 0 (nếu Aibat tự reset về 0)
       const currentValue = await item.locator.inputValue();
       expect(currentValue === '' || currentValue === '0', 
         `Ô ${item.name} không chặn được dấu trừ. Giá trị hiện tại: ${currentValue}`).toBe(true);
@@ -499,42 +398,13 @@ test.describe('G. Validation VAT', () => {
     }
   );
 
-  // test('CP_TC_29 - VAT chặn giá trị âm @medium @boundary',
-  //   async ({ page }) => {
-  //     await pp.vatInput.fill('-5');
-  //     const val = await pp.vatInput.inputValue();
-  //     const hasError = await page
-  //       .locator('text=VAT phải nằm trong khoảng 0 đến 100')
-  //       .isVisible().catch(() => false);
-  //     expect(hasError || !val.includes('-')).toBeTruthy();
-  //   }
-  // );
-
-  //   test('CP_TC_29 - VAT chặn giá trị âm @medium @boundary',
-  //   async ({ page }) => {
-  //     await pp.vatInput.click();
-  //     await pp.vatInput.pressSequentially('-');
-  //     //await pp.vatInput.fill('-7');
-  //     await expect(pp.vatInput).toHaveValue('');
-  //   }
-  // );
-
   test('CP_TC_29 - VAT chặn giá trị âm @medium @boundary', async ({ page }) => {
-    // Click và xóa trắng trước khi thử nhập
     await pp.vatInput.click({ clickCount: 3 });
     await page.keyboard.press('Backspace');
-
-    // Thử gõ dấu trừ và số âm
     await pp.vatInput.pressSequentially('-7');
-    
-    // Đợi một nhịp để mask xử lý
     await page.waitForTimeout(300);
-
-    // XÁC NHẬN: Giá trị không được chứa dấu trừ, hoặc ô input vẫn rỗng/giữ số cũ
     const value = await pp.vatInput.inputValue();
     expect(value).not.toContain('-');
-    // Hoặc nếu Aibat tự chuyển âm thành dương (7):
-    // expect(value).toBe('7'); 
   });
   
 });
@@ -560,19 +430,6 @@ test.describe('I. Quản lý nâng cao', () => {
     }
   );
 
-  // test('CP_TC_31 - Tạo sản phẩm loại IMEI/Seri thành công @medium @functional',
-  //   async ({ page }) => {
-  //     await pp.fillName(TD.uniqueName('Điện thoại X'));
-  //     await pp.checkIsImei();
-  //     // Nhập danh sách IMEI nếu UI yêu cầu
-  //     const imeiInput = page.locator('input[placeholder*="IMEI"], textarea[placeholder*="IMEI"]');
-  //     if (await imeiInput.isVisible({ timeout: 3000 }).catch(() => false)) {
-  //       await imeiInput.fill('IMEI001\nIMEI002');
-  //     }
-  //     await pp.save();
-  //     await pp.expectSuccessToast();
-  //   }
-  // );
   test('CP_TC_31 - Tạo sản phẩm loại IMEI/Seri thành công @medium @functional',
     async ({ page }) => {
       await pp.fillName(TD.uniqueName('Điện thoại X'));
@@ -582,23 +439,6 @@ test.describe('I. Quản lý nâng cao', () => {
     }
   );
 
-  // test('CP_TC_32 - Tạo sản phẩm loại Lô-HSD thành công @medium @functional',
-  //   async ({ page }) => {
-  //     await pp.fillName(TD.uniqueName('Sữa tươi'));
-  //     await pp.checkIsBatch();
-  //     // Nhập thông tin lô nếu UI hiện ra
-  //     const lotInput = page.locator('input[name*="lot"], input[placeholder*="lô"]');
-  //     if (await lotInput.isVisible({ timeout: 3000 }).catch(() => false)) {
-  //       await lotInput.fill('LOT001');
-  //     }
-  //     const expiryInput = page.locator('input[name*="expiry"], input[placeholder*="hạn"]');
-  //     if (await expiryInput.isVisible({ timeout: 3000 }).catch(() => false)) {
-  //       await expiryInput.fill('2026-12-31');
-  //     }
-  //     await pp.save();
-  //     await pp.expectSuccessToast();
-  //   }
-  // );
     test('CP_TC_32 - Tạo sản phẩm loại Lô-HSD thành công @medium @functional',
     async ({ page }) => {
       await pp.fillName(TD.uniqueName('Sữa tươi'));
@@ -667,7 +507,6 @@ test.describe('K. Upload hình ảnh sản phẩm', () => {
   test(
     'CP_TC_36 - UI phải chặn upload file không phải định dạng ảnh @high @functional',
     async ({ page }) => {
-      // BUG: UI hiện không chặn, cho phép tải .docx và bị lỗi sau đó
       const docxPath = path.join(FIXTURES, 'sample.docx');
       await pp.uploadImage(docxPath);
       await expect(
@@ -706,28 +545,19 @@ test.describe('L. Thông tin bổ sung', () => {
     await pp.openCreateForm();
   });
 
-  // test('CP_TC_38 - Thời hạn bảo hành chỉ cho phép số nguyên dương @low @validation',
-  //   async ({ page }) => {
-  //     await pp.warrantyInput.fill('abc12.5');
-  //     const val = await pp.warrantyInput.inputValue();
-  //     // Chỉ giữ số nguyên → '125' (bỏ chữ cái và dấu chấm)
-  //     expect(/^\d+$/.test(val)).toBeTruthy();
-  //     expect(val).toBe('125');
-  //   }
-  // );
-test('CP_TC_38 - Kiểm tra tính năng lọc ký tự tại ô Thời hạn bảo hành @low @validation',
-    async ({ page }) => {  
-      // 2. Click vào ô Thời hạn bảo hành để bắt đầu nhập
-      await pp.warrantyInput.click();
-      await page.keyboard.type('abc!@#');
-      const valAfterAlpha = await pp.warrantyInput.inputValue();
-      expect(valAfterAlpha).toBe('');
-      await pp.warrantyInput.clear();
-      await page.keyboard.type('12e');
-      const valWithE = await pp.warrantyInput.inputValue();
-      console.log(`Giá trị khi nhập '12e': ${valWithE}`);
-    }
-  );
+  test('CP_TC_38 - Kiểm tra tính năng lọc ký tự tại ô Thời hạn bảo hành @low @validation',
+      async ({ page }) => {  
+        // 2. Click vào ô Thời hạn bảo hành để bắt đầu nhập
+        await pp.warrantyInput.click();
+        await page.keyboard.type('abc!@#');
+        const valAfterAlpha = await pp.warrantyInput.inputValue();
+        expect(valAfterAlpha).toBe('');
+        await pp.warrantyInput.clear();
+        await page.keyboard.type('12e');
+        const valWithE = await pp.warrantyInput.inputValue();
+        console.log(`Giá trị khi nhập '12e': ${valWithE}`);
+      }
+    );
 
   test('CP_TC_39 - Hiển thị lỗi khi nhập số thập phân vào bảo hành @low @validation',
     async ({ page }) => {
@@ -741,8 +571,7 @@ test('CP_TC_38 - Kiểm tra tính năng lọc ký tự tại ô Thời hạn b�
 
   test('CP_TC_40 - Đơn vị bảo hành cho phép chọn day/month/year @low @ui',
     async ({ page }) => {
-      await pp.warrantyUnitSelect.click();
-      // Vuetify combobox — dùng v-list-item
+      await pp.warrantyUnitSelect.click();      
       const listItems = page.locator('.v-menu__content .v-list-item, .menuable__content__active .v-list-item');
       await listItems.first().waitFor({ state: 'visible', timeout: 5000 });
       const options = await listItems.allTextContents();
@@ -791,7 +620,6 @@ test.describe('M. Thao tác form', () => {
       await pp.cancel();
       //await pp.expectFormHidden();
 
-      // Mở lại form — phải trống
       await pp.openCreateForm();
       await expect(pp.nameInput).toHaveValue('');
     }
@@ -813,11 +641,10 @@ test.describe('M. Lỗi mạng / hệ thống', () => {
       await pp.openCreateForm();
       await pp.fillName(TD.uniqueName('Network test'));
 
-      // Ngắt mạng
       await context.setOffline(true);
       await pp.save();
       await expect(page.locator('text=Có lỗi xảy ra')).toBeVisible({ timeout: 15000 });
-      // Dữ liệu trên form được giữ nguyên
+
       await expect(pp.nameInput).not.toHaveValue('');
 
       // Bật lại mạng và lưu lần 2

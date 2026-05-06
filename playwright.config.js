@@ -12,16 +12,17 @@ module.exports = defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   reporter: [
+    ['list'],                                              
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
-    ['list'],
-    ['allure-playwright', {
+    ['allure-playwright', {                               
       detail: true,
       outputFolder: 'allure-results',
-      suiteTitle: true,
+      suiteTitle: false,
       environmentInfo: {
         framework: 'Playwright',
         application: 'Aibat - Quản lý kinh doanh',
-        usecases: 'UC01-UC05',
+        node_version: process.version,
+        os_platform: process.platform,
       },
     }],
   ],

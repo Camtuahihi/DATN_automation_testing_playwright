@@ -18,9 +18,6 @@ const P = {
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
 /**
- * Chờ dropdown phản hồi sau khi fill keyword.
- * Dùng selector CSS gốc (không filter) để tránh compound-locator timeout.
- * Bắt được cả item kết quả lẫn thông báo "Không có dữ liệu".
  * @param {import('@playwright/test').Page} page
  */
 async function waitForDropdownResponse(page) {
@@ -32,8 +29,6 @@ async function waitForDropdownResponse(page) {
 }
 
 /**
- * Thêm sản phẩm vào đơn; trả về false nếu không tìm thấy (caller tự skip).
- * Không filter thêm theo tên — search đủ cụ thể nên item đầu tiên là đúng.
  * @param {OrderPage} op
  * @param {import('@playwright/test').Page} page
  * @param {string} productName
@@ -44,20 +39,15 @@ async function addProduct(op, page, productName, _retry = true) {
   await op.searchProduct(productName);
   await waitForDropdownResponse(page);
 
-  // Nếu chỉ thấy thông báo "Không có dữ liệu" → sản phẩm không tồn tại
   if (await op.noDataMessage.isVisible()) return false;
   if ((await op.productDropdown.count()) === 0) return false;
 
-  // Ưu tiên click item có tên khớp với productName (dropdown có thể hiện kết quả
-  // chưa lọc trong khoảnh khắc đầu, dễ click sai sản phẩm nếu dùng first())
   const matched = op.productDropdown.filter({ hasText: productName });
   const visible = await matched.first()
     .waitFor({ state: 'visible', timeout: 8000 })
     .then(() => true).catch(() => false);
 
   if (!visible) {
-    // App có thể đã navigation trong khi tìm kiếm (ví dụ: sau khi xóa dòng lỗi).
-    // Đợi trang ổn định rồi thử lại một lần.
     if (!_retry) return false;
     await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
     return addProduct(op, page, productName, false);
@@ -80,8 +70,6 @@ function near(actual, expected, tolerance = 2) {
 }
 
 // ─── A. HIỂN THỊ ĐẶC THÙ THEO LOẠI SẢN PHẨM ─────────────────────────────────
-// OR_01 | OR_TC_01 – OR_TC_04
-
 test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
   /** @type {OrderPage} */
   let op;
@@ -101,21 +89,16 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
       const row = op.getOrderRow(0);
       await row.waitFor({ state: 'visible', timeout: 8000 });
 
-      // Tên và SKU xuất hiện trong vùng đơn hàng (scope ra main-left vì tên/SKU
-      // có thể nằm trong component Vue con không phải text node trực tiếp của row div)
       const orderArea = page.locator('.main-left');
       await expect(orderArea.getByText(P.DEN.name).first()).toBeVisible({ timeout: 10000 });
       await expect(orderArea.getByText(P.DEN.sku).first()).toBeVisible();
 
-      // Số lượng mặc định = 1
       expect(await op.getRowQty(0)).toBe(1);
 
-      // Đơn giá hiển thị
       const priceInput = op.getPriceInput(0);
       await expect(priceInput).toBeVisible();
       await expect(priceInput).toBeEnabled();
 
-      // Có ô CK và VAT
       await expect(op.getLineDiscountInput(0)).toBeVisible();
       await expect(op.getVATInput(0)).toBeVisible();
 
@@ -127,18 +110,16 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
 
   // // ── OR_TC_02 ──────────────────────────────────────────────────────────────
   test(
-    'OR_TC_02 - Dòng sản phẩm IMEI hiển thị trường "Danh sách IMEI", SL=0 @high @ui',
+    'OR_TC_02 - Dòng sản phẩm IMEI hiển thị Danh sách IMEI, SL=0 @high @ui',
     async () => {
-      // TODO: cần verify selector IMEI field trên DOM thực tế — tạm bỏ qua
       test.skip(true, 'Cần kiểm tra DOM thực tế để xác định selector trường IMEI');
     },
   );
 
   // ── OR_TC_03 ──────────────────────────────────────────────────────────────
   test(
-    'OR_TC_03 - Dòng sản phẩm Lô-HSD hiển thị trường "Danh sách lô hàng", SL=0 @high @ui',
+    'OR_TC_03 - Dòng sản phẩm Lô-HSD hiển thị Danh sách lô hàng, SL=0 @high @ui',
     async () => {
-      // TODO: CeraVe hiển thị là "Thường" trong môi trường test — tạm bỏ qua
       test.skip(true, 'Sản phẩm Lô-HSD chưa được setup đúng trong môi trường test');
     },
   );
@@ -147,7 +128,7 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
   test(
     'OR_TC_04 - Sản phẩm có VAT hiển thị label "(Sản phẩm có áp dụng VAT)" cạnh tên @medium @ui',
     async ({ page }) => {
-      // Đèn Rạng Đông có VAT mặc định = 10% theo đặc tả
+      // Đèn Rạng Đông có VAT mặc định = 10% 
       const ok = await addProduct(op, page, P.DEN.name);
       if (!ok) test.skip(true, `Không tìm thấy "${P.DEN.name}"`);
 
@@ -156,10 +137,8 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
   );
 });
 
-// ─── B. SỐ LƯỢNG & TỒN KHO ─────────────────────────────────────────────────
-// OR_02 / OR_03 | OR_TC_05 – OR_TC_12
-
-test.describe('B1. Thao tác số lượng', () => {
+// ─── B. SỐ LƯỢNG ─────────────────────────────────────────────────
+test.describe('B. Số lượng', () => {
   /** @type {OrderPage} */
   let op;
 
@@ -205,7 +184,6 @@ test.describe('B1. Thao tác số lượng', () => {
     async () => {
       expect(await op.getRowQty(0)).toBe(1);
       await op.clickMinus(0);
-      // SL vẫn phải là 1 — nút (-) không có tác dụng khi SL đang là giá trị tối thiểu
       expect(await op.getRowQty(0)).toBe(1);
     },
   );
@@ -233,13 +211,12 @@ test.describe('B1. Thao tác số lượng', () => {
 
       const val = await input.inputValue();
       expect(val).not.toContain('-');
-      // Giá trị hợp lệ: chỉ chứa số dương
       expect(Number(val.replace(/\D/g, ''))).toBeGreaterThanOrEqual(0);
     },
   );
 });
 
-test.describe('B2. Tồn kho', () => {
+test.describe('C. Tồn kho', () => {
   /** @type {OrderPage} */
   let op;
 
@@ -253,7 +230,6 @@ test.describe('B2. Tồn kho', () => {
     'OR_TC_10 - Chặn thêm SP không bán âm khi Có thể bán = 0 @high @negative',
     async ({ page }) => {
       // Precondition: "Bình giữ nhiệt" (SKU 6719636) tồn kho = 0, không bán âm
-      // Dùng SKU để tránh match nhầm "Bình giữ nhiệt 2" (6720748)
       await op.searchProduct(P.BINH_GT.sku);
       await waitForDropdownResponse(page);
 
@@ -262,8 +238,7 @@ test.describe('B2. Tồn kho', () => {
       }
       await op.productDropdown.filter({ hasText: P.BINH_GT.sku }).first().click({ force: true });
 
-      // Toast text may vary across app versions; primary assertion is order stays empty
-      await op.expectToastContains('không được bán âm').catch(() => {});
+      await op.expectToastContains('Sản phẩm này không được bán âm').catch(() => {});
       await page.waitForTimeout(1000);
       expect(await op.getOrderRowCount()).toBe(0);
     },
@@ -288,7 +263,6 @@ test.describe('B2. Tồn kho', () => {
       const ok = await addProduct(op, page, P.GO_DO.name);
       if (!ok) test.skip(true, `"${P.GO_DO.name}" không có trong môi trường test`);
 
-      // Verify product was actually added — system may block if not configured for negative selling
       const rowAdded = await op.getOrderRow(0).waitFor({ state: 'visible', timeout: 5000 })
         .then(() => true).catch(() => false);
       if (!rowAdded) {
@@ -296,17 +270,15 @@ test.describe('B2. Tồn kho', () => {
       }
 
       await op.setQuantity(0, 2);
-      //Không có thông báo lỗi, SL được chấp nhận
+
       const val = await op.getRowQty(0);
       expect(val).toBe(2);
     },
   );
 });
 
-// ─── C. CHIẾT KHẤU DÒNG ─────────────────────────────────────────────────────
-// OR_04 | OR_TC_13 – OR_TC_17
-
-test.describe('C. Chiết khấu dòng', () => {
+// ─── D. CHIẾT KHẤU DÒNG ─────────────────────────────────────────────────────
+test.describe('D. Chiết khấu dòng', () => {
   /** @type {OrderPage} */
   let op;
 
@@ -380,16 +352,11 @@ test.describe('C. Chiết khấu dòng', () => {
   );
 });
 
-// ─── D. CHIẾT KHẤU TỔNG ĐƠN ─────────────────────────────────────────────────
-// OR_05 | OR_TC_18 – OR_TC_21
-
-test.describe('D. Chiết khấu tổng đơn', () => {
+// ─── E. CHIẾT KHẤU TỔNG ĐƠN ─────────────────────────────────────────────────
+test.describe('E. Chiết khấu tổng đơn', () => {
   /** @type {OrderPage} */
   let op;
 
-  // Thêm 2 sản phẩm cơ bản (không VAT)
-  // DOM thêm sản phẩm mới nhất lên đầu (index 0). Thêm DEN trước → DEN ở row 1.
-  // Thêm COC sau → COC ở row 0. Row 0=COC(50k), Row 1=DEN(150k) đúng với assertion.
   /** @param {import('@playwright/test').Page} page */
   async function addTwoProducts(page) {
     op = new OrderPage(page);
@@ -399,7 +366,7 @@ test.describe('D. Chiết khấu tổng đơn', () => {
     if (!ok1 || !ok2) {
       test.skip(true, `Cần cả "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
     }
-    // Đặt VAT = 0 cho cả 2 dòng để loại trừ VAT khỏi các test này
+    // Đặt VAT = 0 
     await op.setVAT(0, 0);
     await op.setVAT(1, 0);
   }
@@ -460,17 +427,14 @@ test.describe('D. Chiết khấu tổng đơn', () => {
   );
 });
 
-// ─── E. ÁP DỤNG VAT ─────────────────────────────────────────────────────────
-// OR_06 | OR_TC_22 – OR_TC_24
-
-test.describe('E. Áp dụng VAT', () => {
+// ─── G. ÁP DỤNG VAT ─────────────────────────────────────────────────────────
+test.describe('G. Áp dụng VAT', () => {
   /** @type {OrderPage} */
   let op;
 
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    // DEN thêm trước → row 1; COC thêm sau → row 0 (app thêm mới lên đầu)
     const ok1 = await addProduct(op, page, P.DEN.name);
     const ok2 = await addProduct(op, page, P.COC.name);
     if (!ok1 || !ok2) {
@@ -522,10 +486,8 @@ test.describe('E. Áp dụng VAT', () => {
   );
 });
 
-// ─── F. KẾT HỢP CK DÒNG + CK TỔNG + VAT ────────────────────────────────────
-// OR_07 | OR_TC_25 – OR_TC_28
-
-test.describe('F. Kết hợp CK dòng + CK tổng + VAT', () => {
+// ─── H. KẾT HỢP CK DÒNG + CK TỔNG + VAT ────────────────────────────────────
+test.describe('H. Kết hợp CK dòng + CK tổng + VAT', () => {
   /** @type {OrderPage} */
   let op;
 
@@ -533,7 +495,6 @@ test.describe('F. Kết hợp CK dòng + CK tổng + VAT', () => {
   async function setupTwoProducts(page) {
     op = new OrderPage(page);
     await op.open();
-    // DEN thêm trước → row 1; COC thêm sau → row 0
     const ok1 = await addProduct(op, page, P.DEN.name);
     const ok2 = await addProduct(op, page, P.COC.name);
     if (!ok1 || !ok2) {
@@ -614,17 +575,14 @@ test.describe('F. Kết hợp CK dòng + CK tổng + VAT', () => {
   );
 });
 
-// ─── G. CHI PHÍ KHÁC ────────────────────────────────────────────────────────
-// OR_08 | OR_TC_29 – OR_TC_30
-
-test.describe('G. Chi phí khác', () => {
+// ─── I. CHI PHÍ KHÁC ────────────────────────────────────────────────────────
+test.describe('I. Chi phí khác', () => {
   /** @type {OrderPage} */
   let op;
 
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    // DEN thêm trước → row 1; COC thêm sau → row 0
     const ok1 = await addProduct(op, page, P.DEN.name);
     const ok2 = await addProduct(op, page, P.COC.name);
     if (!ok1 || !ok2) test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
@@ -648,7 +606,6 @@ test.describe('G. Chi phí khác', () => {
   test(
     'OR_TC_30 - Chặn nhập Chi phí khác âm @low @negative',
     async ({ page }) => {
-      // Chi phí khác mở dialog khi click → cần openAdditionalCostDialog() trước
       await op.openAdditionalCostDialog();
       const input = op.additionalCostInput;
       await input.click({ clickCount: 3 });
@@ -658,7 +615,6 @@ test.describe('G. Chi phí khác', () => {
       const val = await input.inputValue();
       expect(val).not.toContain('-');
 
-      // Đóng dialog
       await page.locator('.v-dialog--active').getByText('Hủy', { exact: true }).click().catch(() => {
         page.keyboard.press('Escape');
       });
@@ -666,17 +622,15 @@ test.describe('G. Chi phí khác', () => {
   );
 });
 
-// ─── H. TIỀN KHÁCH ĐƯA ──────────────────────────────────────────────────────
-// OR_09 | OR_TC_31 – OR_TC_33
+// ─── J. TIỀN KHÁCH ĐƯA ──────────────────────────────────────────────────────
 
-test.describe('H. Tiền khách đưa', () => {
+test.describe('J. Tiền khách đưa', () => {
   /** @type {OrderPage} */
   let op;
 
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    // DEN thêm trước → row 1; COC thêm sau → row 0 (tổng = 200.000)
     const ok1 = await addProduct(op, page, P.DEN.name);
     const ok2 = await addProduct(op, page, P.COC.name);
     if (!ok1 || !ok2) test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
@@ -720,23 +674,19 @@ test.describe('H. Tiền khách đưa', () => {
         const change = await op.getSidebarChange();
         expect(change).toBe(0);
       }
-      // Hệ thống không crash; sidebar vẫn hiển thị bình thường
       await expect(page.locator('[class*="sidebar"], [class*="order-summary"]').first()).toBeVisible();
     },
   );
 });
 
-// ─── I. THAO TÁC DÒNG HÀNG ──────────────────────────────────────────────────
-// OR_10 | OR_TC_34 – OR_TC_35
-
-test.describe('I. Thao tác dòng hàng', () => {
+// ─── K. THAO TÁC DÒNG HÀNG ──────────────────────────────────────────────────
+test.describe('K. Thao tác dòng hàng', () => {
   /** @type {OrderPage} */
   let op;
 
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    // DEN thêm trước → row 1; COC thêm sau → row 0
     const ok1 = await addProduct(op, page, P.DEN.name);
     const ok2 = await addProduct(op, page, P.COC.name);
     if (!ok1 || !ok2) test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
@@ -750,10 +700,8 @@ test.describe('I. Thao tác dòng hàng', () => {
     async ({ page }) => {
       expect(await op.getOrderRowCount()).toBe(2);
 
-      // Xóa dòng thứ 2 (Đèn Rạng Đông, index=1)
       await op.deleteRow(1);
 
-      // Chỉ còn 1 dòng
       await expect(op.orderRows).toHaveCount(1, { timeout: 5000 });
 
       // KH phải trả cập nhật về 50.000 (chỉ còn Cốc sứ)
@@ -778,10 +726,8 @@ test.describe('I. Thao tác dòng hàng', () => {
   );
 });
 
-// ─── J. CASE ĐẶC THÙ — IMEI / LÔ-HSD ───────────────────────────────────────
-// OR_12 | OR_TC_36
-
-test.describe('J. Case đặc thù — Lô-HSD', () => {
+// ─── L. CASE ĐẶC THÙ — IMEI / LÔ-HSD ───────────────────────────────────────
+test.describe('L. Case đặc thù — Lô-HSD', () => {
   // ── OR_TC_36 ──────────────────────────────────────────────────────────────
   test(
     'OR_TC_36 - Lô-HSD: nhập "Số lượng bán" > Tồn kho lô → báo "Số lượng bán nhiều hơn tồn kho" @high @negative',
@@ -796,7 +742,6 @@ test.describe('J. Case đặc thù — Lô-HSD', () => {
       const row = op.getOrderRow(0);
       await row.waitFor({ state: 'visible', timeout: 8000 });
 
-      // Mở popup chọn lô
       const lotBtn = row
         .locator('button, [class*="lot"], [class*="lo-hang"]')
         .filter({ hasText: /chọn lô|danh sách lô/i })
@@ -821,7 +766,6 @@ test.describe('J. Case đặc thù — Lô-HSD', () => {
       await lotQtyInput.click({ clickCount: 3 });
       await lotQtyInput.fill('6');
 
-      // Nhấn Đồng ý
       await page.getByRole('button', { name: /đồng ý|xác nhận/i }).click();
       await page.waitForTimeout(500);
 

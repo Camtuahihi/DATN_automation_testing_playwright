@@ -5,14 +5,12 @@ const { OrderPage } = require('../pages/OrderPage');
 // ─── Hằng số sản phẩm test ────────────────────────────────────────────────────
 const P = {
   GIAY:    { name: 'Giấy ăn',                sku: 'msp5765190', price: 15_000 },
-  DUA:     { name: 'Lòng xào dưa',            sku: '5852216',    price: 50_000 },
+  DUA:     { name: 'Lòng xào dưa',            sku: '58522167',    price: 50_000 },
   MACBOOK: { name: 'Macbook air 4 pro',       sku: '6724122',    price: 40_000_000 },
   COCTY:   { name: 'cốc tình yêu',            sku: '6724124',    price: 200_000 },
   SON:     { name: 'Son Dior 999 Satin 1.5g', sku: '6593938' },
   HOATTS:  { name: 'Hoa thủy tiên',           sku: '6724126' },
 };
-
-// ─── Helpers ───────────────────────────────────────────────────────────────────
 
 /** @param {import('@playwright/test').Page} page */
 async function waitForDropdownResponse(page) {
@@ -53,8 +51,6 @@ async function addProduct(op, page, productKey, _retry = true) {
 }
 
 // ─── A. KÍCH HOẠT LỆNH TẠO ĐƠN ──────────────────────────────────────────────
-// UC04 | TC_CD_01 – TC_CD_02
-
 test.describe('A. Kích hoạt lệnh tạo đơn', () => {
   /** @type {OrderPage} */
   let op;
@@ -74,23 +70,23 @@ test.describe('A. Kích hoạt lệnh tạo đơn', () => {
     await op.setTotalDiscount(10000, 'amount');
   });
 
-  // ── TC_CD_01 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_01 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_01 - Tạo đơn bán hàng thành công bằng nút nhấn @high @functional',
+    'CO_TC_01 - Tạo đơn bán hàng thành công bằng nút nhấn @high @functional',
     async ({ page }) => {
       await op.clickCreateOrder();
       await op.expectToastContains('Tạo đơn hàng thành công');
       await op.expectInvoiceDialogVisible();
       await op.closeInvoice();
-      // Đợi page ổn định sau khi đóng popup (tránh navigation race condition)
+
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
       await page.waitForTimeout(500);
     },
   );
 
-  // ── TC_CD_02 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_02 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_02 - Tạo đơn bán hàng thành công bằng phím tắt F9 @high @functional',
+    'CO_TC_02 - Tạo đơn bán hàng thành công bằng phím tắt F9 @high @functional',
     async ({ page }) => {
       await op.pressF9();
       await op.expectToastContains('Tạo đơn hàng thành công');
@@ -103,8 +99,6 @@ test.describe('A. Kích hoạt lệnh tạo đơn', () => {
 });
 
 // ─── B. TẠO ĐƠN BÁN HÀNG THẤT BẠI ────────────────────────────────────────
-// UC04 | TC_CD_03 – TC_CD_05
-
 test.describe('B. Tạo đơn bán hàng thất bại', () => {
   /** @type {OrderPage} */
   let op;
@@ -114,20 +108,20 @@ test.describe('B. Tạo đơn bán hàng thất bại', () => {
     await op.open();
   });
 
-  // ── TC_CD_03 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_03 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_03 - Chặn tạo đơn khi danh sách sản phẩm trống @high @negative',
+    'CO_TC_03 - Chặn tạo đơn khi danh sách sản phẩm trống @high @negative',
     async () => {
       await op.clickCreateOrder();
       await op.expectToastContains('Bạn phải chọn sản phẩm');
     },
   );
 
-  // ── TC_CD_04 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_04 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_04 - Chặn tạo đơn khi sản phẩm IMEI chưa chọn mã IMEI (SL=0) @high @negative',
+    'CO_TC_04 - Chặn tạo đơn khi sản phẩm IMEI chưa chọn mã IMEI (SL=0) @high @negative',
     async ({ page }) => {
-      // Thêm sản phẩm IMEI nhưng KHÔNG mở popup chọn mã → SL mặc định = 0
+
       const ok = await addProduct(op, page, P.MACBOOK.sku);
       if (!ok) test.skip(true, `Không tìm thấy "${P.MACBOOK.name}" (SKU: ${P.MACBOOK.sku})`);
       await page.keyboard.press('Escape');
@@ -137,11 +131,11 @@ test.describe('B. Tạo đơn bán hàng thất bại', () => {
     },
   );
 
-  // ── TC_CD_05 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_05 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_05 - Chặn tạo đơn khi sản phẩm Lô-HSD chưa chọn lô (SL=0) @high @negative',
+    'CO_TC_05 - Chặn tạo đơn khi sản phẩm Lô-HSD chưa chọn lô (SL=0) @high @negative',
     async ({ page }) => {
-      // Thêm sản phẩm Lô-HSD nhưng KHÔNG mở popup chọn lô → SL mặc định = 0
+
       const ok = await addProduct(op, page, P.COCTY.sku);
       if (!ok) test.skip(true, `Không tìm thấy "${P.COCTY.name}" (SKU: ${P.COCTY.sku})`);
       await page.keyboard.press('Escape');
@@ -153,8 +147,6 @@ test.describe('B. Tạo đơn bán hàng thất bại', () => {
 });
 
 // ─── C. TẠO ĐƠN BÁN HÀNG THÀNH CÔNG ───────────────────────────────────
-// UC04 | TC_CD_06 – TC_CD_08
-
 test.describe('C. Tạo đơn bán hàng thành công', () => {
   /** @type {OrderPage} */
   let op;
@@ -164,9 +156,9 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
     await op.open();
   });
 
-  // ── TC_CD_06 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_06 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_06 - Tạo đơn sản phẩm thường thành công @high @functional',
+    'CO_TC_06 - Tạo đơn sản phẩm thường thành công @high @functional',
     async ({ page }) => {
       // Đọc tồn kho TRƯỚC khi tạo đơn
       const inventoryBefore = await op.getProductInventoryFromSearch(P.SON.sku);
@@ -190,9 +182,9 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
     },
   );
 
-  // ── TC_CD_07 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_07 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_07 - Tạo đơn sản phẩm imei thành công @high @functional',
+    'CO_TC_07 - Tạo đơn sản phẩm imei thành công @high @functional',
     async ({ page }) => {
       // Đọc tồn kho TRƯỚC (= số mã IMEI available)
       const inventoryBefore = await op.getProductInventoryFromSearch(P.MACBOOK.sku);
@@ -208,7 +200,6 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
       // Mở popup IMEI và chọn mã "514"
       await op.selectIMEICode(0, '514');
       
-      // Kiểm tra UI hiển thị đã chọn 1 sản phẩm
       await expect(page.locator('text=Danh sách IMEI (1/3)')).toBeVisible();
 
       await op.clickCreateOrder();
@@ -222,9 +213,9 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
     },
   );
 
-  // ── TC_CD_08 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_08 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_08 - Tạo đơn sản phẩm Lô-HSD thành công @high @functional',
+    'CO_TC_08 - Tạo đơn sản phẩm Lô-HSD thành công @high @functional',
     async ({ page }) => {
       const ok = await addProduct(op, page, P.COCTY.sku);
       if (!ok) test.skip(true, `Không tìm thấy "${P.COCTY.name}" (SKU: ${P.COCTY.sku})`);
@@ -237,18 +228,14 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
       await op.expectToastContains('Tạo đơn hàng thành công');
       await op.expectInvoiceDialogVisible();
       await op.closeInvoice();
-      // Xác nhận đơn tạo thành công; việc kiểm tra tồn kho lô cụ thể
-      // cần điều hướng sang màn quản lý sản phẩm (ngoài phạm vi UC04).
     },
   );
 });
 
 // ─── D. VERIFY DOANH THU ─────────────────────────────────────────────────────
-// UC04 | TC_CD_09
-
 test.describe('D. Verify doanh thu', () => {
   test(
-    'TC_CD_09 - Kiểm tra doanh thu ghi nhận sau khi tạo đơn @medium',
+    'CO_TC_09 - Kiểm tra doanh thu ghi nhận sau khi tạo đơn @medium',
     async () => {
       test.skip(true, 'Cần điều hướng sang màn báo cáo doanh thu — ngoài phạm vi UC04');
     },
@@ -256,8 +243,6 @@ test.describe('D. Verify doanh thu', () => {
 });
 
 // ─── E. XỬ LÝ ĐỒNG THỜI ─────────────────────────────────────────────────────
-// UC04 | TC_CD_10 – TC_CD_11
-
 test.describe('E. Xử lý đồng thời', () => {
   /** @type {OrderPage} */
   let op;
@@ -267,9 +252,9 @@ test.describe('E. Xử lý đồng thời', () => {
     await op.open();
   });
 
-  // ── TC_CD_10 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_10 ─────────────────────────────────────────────────────────────
   test(
-    'TC_CD_10 - Nhấn "Tạo đơn" liên tục nhiều lần — hệ thống chỉ xử lý 1 lần @high @functional',
+    'CO_TC_10 - Nhấn "Tạo đơn" liên tục nhiều lần — hệ thống chỉ xử lý 1 lần @high @functional',
     async ({ page }) => {
       const inventoryBefore = await op.getProductInventoryFromSearch(P.HOATTS.sku);
       if (inventoryBefore === null) {
@@ -281,43 +266,36 @@ test.describe('E. Xử lý đồng thời', () => {
       if (!ok) test.skip(true, `Không thêm được "${P.HOATTS.name}"`);
       await page.keyboard.press('Escape');
 
-      // Thử click "Tạo đơn" nhanh 3 lần bằng evaluate để bypass dialog overlay
-      // Mục tiêu: hệ thống chỉ tạo đúng 1 đơn dù nhận nhiều click
       await op.createOrderButton.click({ force: true });
       await op.createOrderButton.click({ force: true });
       await op.createOrderButton.click({ force: true });
 
-      // Chờ kết quả: chỉ 1 thông báo thành công
       await op.expectToastContains('Tạo đơn hàng thành công');
 
-      // Đóng popup invoice nếu hiện
       const dialogVisible = await page.locator('.v-dialog--active').first()
         .isVisible({ timeout: 3000 }).catch(() => false);
       if (dialogVisible) await op.closeInvoice();
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
-      // Tồn kho chỉ giảm đúng 1 lần (không giảm 3 lần do duplicate order)
       const inventoryAfter = await op.getProductInventoryFromSearch(P.HOATTS.sku);
       expect(inventoryAfter).toBe(inventoryBefore - 1);
     },
   );
 
-  // ── TC_CD_11 ─────────────────────────────────────────────────────────────
+  // ── CO_TC_11 ─────────────────────────────────────────────────────────────
   test.skip(
-    'TC_CD_11 - Mất kết nối internet khi nhấn "Tạo đơn" @high @negative',
+    'CO_TC_11 - Mất kết nối internet khi nhấn "Tạo đơn" @high @negative',
     async ({ page, context }) => {
-      // Dùng SKU để tìm kiếm chính xác hơn tên
+
       const ok = await addProduct(op, page, P.GIAY.sku);
       if (!ok) test.skip(true, `Không tìm thấy "${P.GIAY.name}" (SKU: ${P.GIAY.sku})`);
       await page.keyboard.press('Escape');
 
-      // Ngắt kết nối mạng trước khi tạo đơn
       await context.setOffline(true);
       try {
         await op.clickCreateOrder();
         await op.expectToastContains('Đơn hàng đã được lưu tạm');
       } finally {
-        // Phục hồi kết nối bất kể kết quả test
         await context.setOffline(false);
       }
     },
