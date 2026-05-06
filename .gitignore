@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+package-lock.json    # tùy team, có team push, có team không
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Test reports & artifacts
+test-results/
+playwright-report/
+allure-results/
+allure-report/
+reports/
+screenshots/
+videos/
+traces/
+
+# Claude Code local settings
+.claude/settings.local.json
+.playwright\.auth
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
