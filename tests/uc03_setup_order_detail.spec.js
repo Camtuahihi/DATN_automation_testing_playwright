@@ -1,21 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 const { OrderPage } = require('../pages/OrderPage');
-
-// ─── Hằng số sản phẩm test ────────────────────────────────────────────────────
-const P = {
-  DEN:      { name: 'Đèn Rạng Đông', sku: '6591092', price: 150_000 },
-  IPHONE:   { name: 'Iphone 17 pro max', sku: '6593940', price: 39_990_000 },
-  CERAVE:   { name: 'Sữa rửa mặt CeraVe 473ml', sku: '6593942', price: 340_000 },
-  COC:      { name: 'Bánh mỳ', sku:'6730972', price: 50_000 },
-  HOA_MAI:  { name: 'Hoa mai', sku:'6730974', price: 100_000 },
-  HOA_DAO:  { name: 'Hoa đào', sku:'6730976', price: 200_000 },
-  BINH_GT:  { name: 'Bình giữ nhiệt', sku: '6719636'},   // không bán âm
-  BINH_GT2:  { name: 'Bình giữ nhiệt 2', sku: '6720748'},   // không bán âm, tồn kho 1
-  GO_DO:    { name: 'Gỗ đỏ', sku:'6730988'  }          // cho bán âm, tồn kho 0
-};
-
-// ─── Helpers ───────────────────────────────────────────────────────────────────
+const { P } = require('../data/productData');
 
 /**
  * @param {import('@playwright/test').Page} page
@@ -59,7 +45,6 @@ async function addProduct(op, page, productName, _retry = true) {
 }
 
 /**
- * So sánh số với dung sai ±tolerance đ.
  * @param {number} actual
  * @param {number} expected
  * @param {number} [tolerance]
@@ -69,7 +54,7 @@ function near(actual, expected, tolerance = 2) {
   return Math.abs(actual - expected) <= tolerance;
 }
 
-// ─── A. HIỂN THỊ ĐẶC THÙ THEO LOẠI SẢN PHẨM ─────────────────────────────────
+//A. HIỂN THỊ ĐẶC THÙ THEO LOẠI SẢN PHẨM
 test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
   /** @type {OrderPage} */
   let op;
@@ -79,7 +64,7 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
     await op.open();
   });
 
-  // ── OR_TC_01 ──────────────────────────────────────────────────────────────
+  //OR_TC_01
   test(
     'OR_TC_01 - Dòng sản phẩm Thường hiển thị đủ: Tên, SKU, Đơn giá, SL=1, CK, VAT, Thành tiền @high @ui',
     async ({ page }) => {
@@ -102,13 +87,12 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
       await expect(op.getLineDiscountInput(0)).toBeVisible();
       await expect(op.getVATInput(0)).toBeVisible();
 
-      // Thành tiền = SL × Đơn giá = 1 × 150.000 = 150.000
       const subtotal = await op.getRowSubtotalText(0);
       expect(subtotal).toMatch(/150[.,]?000/);
     },
   );
 
-  // // ── OR_TC_02 ──────────────────────────────────────────────────────────────
+  //OR_TC_05
   test(
     'OR_TC_02 - Dòng sản phẩm IMEI hiển thị Danh sách IMEI, SL=0 @high @ui',
     async () => {
@@ -116,7 +100,7 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
     },
   );
 
-  // ── OR_TC_03 ──────────────────────────────────────────────────────────────
+  // OR_TC_03
   test(
     'OR_TC_03 - Dòng sản phẩm Lô-HSD hiển thị Danh sách lô hàng, SL=0 @high @ui',
     async () => {
@@ -124,11 +108,10 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
     },
   );
 
-  // ── OR_TC_04 ──────────────────────────────────────────────────────────────
+  //OR_TC_04 
   test(
     'OR_TC_04 - Sản phẩm có VAT hiển thị label "(Sản phẩm có áp dụng VAT)" cạnh tên @medium @ui',
     async ({ page }) => {
-      // Đèn Rạng Đông có VAT mặc định = 10% 
       const ok = await addProduct(op, page, P.DEN.name);
       if (!ok) test.skip(true, `Không tìm thấy "${P.DEN.name}"`);
 
@@ -137,7 +120,7 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
   );
 });
 
-// ─── B. SỐ LƯỢNG ─────────────────────────────────────────────────
+//B. SỐ LƯỢNG
 test.describe('B. Số lượng', () => {
   /** @type {OrderPage} */
   let op;
@@ -150,7 +133,7 @@ test.describe('B. Số lượng', () => {
     await op.getOrderRow(0).waitFor({ state: 'visible', timeout: 8000 });
   });
 
-  // ── OR_TC_05 ──────────────────────────────────────────────────────────────
+  //OR_TC_05 
   test(
     'OR_TC_05 - Tăng số lượng bằng nút (+) @high @functional',
     async () => {
@@ -163,7 +146,7 @@ test.describe('B. Số lượng', () => {
     },
   );
 
-  // ── OR_TC_06 ──────────────────────────────────────────────────────────────
+  //OR_TC_06 
   test(
     'OR_TC_06 - Giảm số lượng bằng nút (-) @high @functional',
     async () => {
@@ -178,7 +161,7 @@ test.describe('B. Số lượng', () => {
     },
   );
 
-  // ── OR_TC_07 ──────────────────────────────────────────────────────────────
+  //OR_TC_07 
   test(
     'OR_TC_07 - Nút (-) bị disable khi Số lượng = 1 @medium @functional',
     async () => {
@@ -188,7 +171,7 @@ test.describe('B. Số lượng', () => {
     },
   );
 
-  // ── OR_TC_08 ──────────────────────────────────────────────────────────────
+  //OR_TC_08 
   test(
     'OR_TC_08 - Nhập số nguyên dương tại ô Số lượng @high @functional',
     async () => {
@@ -200,7 +183,7 @@ test.describe('B. Số lượng', () => {
     },
   );
 
-  // ── OR_TC_09 ──────────────────────────────────────────────────────────────
+  //OR_TC_09 
   test(
     'OR_TC_09 - Chặn nhập số âm tại ô Số lượng "-" @medium @negative',
     async ({ page }) => {
@@ -225,11 +208,10 @@ test.describe('C. Tồn kho', () => {
     await op.open();
   });
 
-  // ── OR_TC_10 ──────────────────────────────────────────────────────────────
+  // OR_TC_10 
   test(
     'OR_TC_10 - Chặn thêm SP không bán âm khi Có thể bán = 0 @high @negative',
     async ({ page }) => {
-      // Precondition: "Bình giữ nhiệt" (SKU 6719636) tồn kho = 0, không bán âm
       await op.searchProduct(P.BINH_GT.sku);
       await waitForDropdownResponse(page);
 
@@ -244,7 +226,7 @@ test.describe('C. Tồn kho', () => {
     },
   );
 
-  // ── OR_TC_11 ──────────────────────────────────────────────────────────────
+  //OR_TC_11
   test(
     'OR_TC_11 - Chặn nhập SL > Tồn kho cho SP không bán âm (tồn kho=1, nhập SL=2) @high @negative',
     async ({ page }) => {
@@ -256,7 +238,7 @@ test.describe('C. Tồn kho', () => {
     },
   );
 
-  // ── OR_TC_12 ──────────────────────────────────────────────────────────────
+  //OR_TC_12 
   test(
     'OR_TC_12 - Cho phép bán SP bán âm với SL > Tồn kho (Gỗ đỏ, tồn=0, SL=2) @high @functional',
     async ({ page }) => {
@@ -277,7 +259,7 @@ test.describe('C. Tồn kho', () => {
   );
 });
 
-// ─── D. CHIẾT KHẤU DÒNG ─────────────────────────────────────────────────────
+//D. CHIẾT KHẤU DÒNG 
 test.describe('D. Chiết khấu dòng', () => {
   /** @type {OrderPage} */
   let op;
@@ -287,7 +269,7 @@ test.describe('D. Chiết khấu dòng', () => {
     await op.open();
   });
 
-  // ── OR_TC_13 ──────────────────────────────────────────────────────────────
+  //OR_TC_13 
   test(
     'OR_TC_13 - Nhập CK dòng theo số tiền (đ) @high @functional',
     async ({ page }) => {
@@ -300,7 +282,7 @@ test.describe('D. Chiết khấu dòng', () => {
     },
   );
 
-  // ── OR_TC_14 ──────────────────────────────────────────────────────────────
+  // OR_TC_14
   test(
     'OR_TC_14 - Nhập CK dòng theo phần trăm (%) @high @functional',
     async ({ page }) => {
@@ -313,7 +295,7 @@ test.describe('D. Chiết khấu dòng', () => {
     },
   );
 
-  // ── OR_TC_15 ──────────────────────────────────────────────────────────────
+  //OR_TC_15 
   test(
     'OR_TC_15 - CK dòng dạng đ không được lớn hơn Đơn giá: báo lỗi @high @boundary',
     async ({ page }) => {
@@ -325,7 +307,7 @@ test.describe('D. Chiết khấu dòng', () => {
     },
   );
 
-  // ── OR_TC_16 ──────────────────────────────────────────────────────────────
+  //OR_TC_16 
   test(
     'OR_TC_16 - CK dòng dạng % không được vượt quá 100: báo lỗi @high @boundary',
     async ({ page }) => {
@@ -337,7 +319,7 @@ test.describe('D. Chiết khấu dòng', () => {
     },
   );
 
-  // ── OR_TC_17 ──────────────────────────────────────────────────────────────
+  //OR_TC_17 
   test(
     'OR_TC_17 - CK dòng dạng % với biên 100 - hợp lệ @medium @boundary',
     async ({ page }) => {
@@ -346,13 +328,12 @@ test.describe('D. Chiết khấu dòng', () => {
 
       await op.setLineDiscount(0, 100, 'percent');
       const subtotal = await op.getRowSubtotalText(0);
-      // Row text contains "Thành tiền 0 đ" when subtotal is 0
       expect(subtotal).toMatch(/Thành tiền\s+0[\s\Wđ]/);
     },
   );
 });
 
-// ─── E. CHIẾT KHẤU TỔNG ĐƠN ─────────────────────────────────────────────────
+//E. CHIẾT KHẤU TỔNG ĐƠN 
 test.describe('E. Chiết khấu tổng đơn', () => {
   /** @type {OrderPage} */
   let op;
@@ -366,34 +347,28 @@ test.describe('E. Chiết khấu tổng đơn', () => {
     if (!ok1 || !ok2) {
       test.skip(true, `Cần cả "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
     }
-    // Đặt VAT = 0 
     await op.setVAT(0, 0);
     await op.setVAT(1, 0);
   }
 
-  // ── OR_TC_18 ──────────────────────────────────────────────────────────────
+  //OR_TC_18 
   test(
     'OR_TC_18 - Áp dụng CK tổng dạng tiền (đ) @high @functional',
     async ({ page }) => {
       await addTwoProducts(page);
-      // Tổng tiền = 50.000 + 150.000 = 200.000
       await op.setTotalDiscount(40000, 'amount');
 
-      // KH phải trả = 200.000 - 40.000 = 160.000
       const mustPay = await op.getSidebarMustPay();
       expect(near(mustPay, 160000, 100)).toBe(true);
-
-      // CK tổng phân bổ: Cốc sứ = 10.000, Tổng cuối = 40.000
       const finalCoc = await op.getRowFinalText(0);
       expect(finalCoc).toMatch(/40[.,]?000/);
 
-      // Đèn: CK phân bổ = 30.000, Tổng cuối = 120.000
       const finalDen = await op.getRowFinalText(1);
       expect(finalDen).toMatch(/120[.,]?000/);
     },
   );
 
-  // ── OR_TC_19 ──────────────────────────────────────────────────────────────
+  // OR_TC_19 
   test(
     'OR_TC_19 - Áp dụng CK tổng dạng phần trăm (%) @high @functional',
     async ({ page }) => {
@@ -406,7 +381,7 @@ test.describe('E. Chiết khấu tổng đơn', () => {
     },
   );
 
-  // ── OR_TC_20 ──────────────────────────────────────────────────────────────
+  //OR_TC_20 
   test(
     'OR_TC_20 - Chặn CK tổng đ > Tổng tiền hàng: báo lỗi @high @boundary',
     async ({ page }) => {
@@ -416,7 +391,7 @@ test.describe('E. Chiết khấu tổng đơn', () => {
     },
   );
 
-  // ── OR_TC_21 ──────────────────────────────────────────────────────────────
+  // OR_TC_21
   test(
     'OR_TC_21 - Chặn CK tổng % > 100: báo lỗi @medium @boundary',
     async ({ page }) => {
@@ -427,7 +402,7 @@ test.describe('E. Chiết khấu tổng đơn', () => {
   );
 });
 
-// ─── G. ÁP DỤNG VAT ─────────────────────────────────────────────────────────
+// G. ÁP DỤNG VAT
 test.describe('G. Áp dụng VAT', () => {
   /** @type {OrderPage} */
   let op;
@@ -442,41 +417,35 @@ test.describe('G. Áp dụng VAT', () => {
     }
   });
 
-  // ── OR_TC_22 ──────────────────────────────────────────────────────────────
+  //OR_TC_22 
   test(
     'OR_TC_22 - Áp dụng VAT cho 2 sản phẩm - không CK @high @functional',
     async () => {
       await op.setVAT(0, 5);   // Cốc sứ
       await op.setVAT(1, 10);  // Đèn
-
-      // Tổng VAT = 50.000×5% + 150.000×10% = 2.500 + 15.000 = 17.500
       const totalVAT = await op.getSidebarTotalVAT();
       expect(near(totalVAT, 17500, 100)).toBe(true);
-
-      // KH phải trả = 200.000 + 17.500 = 217.500
       const mustPay = await op.getSidebarMustPay();
       expect(near(mustPay, 217500, 100)).toBe(true);
     },
   );
 
-  // ── OR_TC_23 ──────────────────────────────────────────────────────────────
+  // OR_TC_23
   test(
     'OR_TC_23 - VAT biên trên 100% và biên dưới 0% @medium @boundary',
     async () => {
-      // VAT = 0 cho Cốc sứ: không thêm VAT
       await op.setVAT(0, 0);
       await op.setVAT(1, 0);
       const vatZero = await op.getSidebarTotalVAT();
       expect(vatZero).toBe(0);
 
-      // VAT = 100 cho Cốc sứ: VAT = 50.000
       await op.setVAT(0, 100);
       const vat100 = await op.getSidebarTotalVAT();
       expect(near(vat100, 50000, 500)).toBe(true);
     },
   );
 
-  // ── OR_TC_24 ──────────────────────────────────────────────────────────────
+  // OR_TC_24
   test(
     'OR_TC_24 - Chặn VAT > 100% @medium @boundary',
     async () => {
@@ -486,7 +455,7 @@ test.describe('G. Áp dụng VAT', () => {
   );
 });
 
-// ─── H. KẾT HỢP CK DÒNG + CK TỔNG + VAT ────────────────────────────────────
+// H. KẾT HỢP CK DÒNG + CK TỔNG + VAT
 test.describe('H. Kết hợp CK dòng + CK tổng + VAT', () => {
   /** @type {OrderPage} */
   let op;
@@ -502,25 +471,22 @@ test.describe('H. Kết hợp CK dòng + CK tổng + VAT', () => {
     }
   }
 
-  // ── OR_TC_25 ──────────────────────────────────────────────────────────────
+  //OR_TC_25
   test(
     'OR_TC_25 - Áp dụng CK dòng đ + CK tổng đ + VAT @high @functional',
     async ({ page }) => {
       await setupTwoProducts(page);
-      // Cốc sứ: VAT=5%, CK=5.000đ
+  
       await op.setLineDiscount(0, 5000, 'amount');
       await op.setVAT(0, 5);
-      // Đèn: VAT=10%, CK=10.000đ
+   
       await op.setLineDiscount(1, 10000, 'amount');
       await op.setVAT(1, 10);
-      // CK tổng = 10.000đ
       await op.setTotalDiscount(10000, 'amount');
 
-      // KH phải trả theo spec: 190.371,622 ≈ 190.372
       const mustPay = await op.getSidebarMustPay();
       expect(near(mustPay, 190372, 500)).toBe(true);
 
-      // Tổng cuối Cốc sứ ≈ 44.695,946
       const finalCoc = await op.getRowFinalText(0);
       expect(finalCoc).toMatch(/44[.,]?69[0-9]/);
     },
@@ -575,7 +541,7 @@ test.describe('H. Kết hợp CK dòng + CK tổng + VAT', () => {
   );
 });
 
-// ─── I. CHI PHÍ KHÁC ────────────────────────────────────────────────────────
+// I. CHI PHÍ KHÁC
 test.describe('I. Chi phí khác', () => {
   /** @type {OrderPage} */
   let op;
@@ -590,7 +556,7 @@ test.describe('I. Chi phí khác', () => {
     await op.setVAT(1, 0);
   });
 
-  // ── OR_TC_29 ──────────────────────────────────────────────────────────────
+  //OR_TC_29
   test(
     'OR_TC_29 - Áp dụng "Chi phí khác" @high @functional',
     async () => {
@@ -602,7 +568,7 @@ test.describe('I. Chi phí khác', () => {
     },
   );
 
-  // ── OR_TC_30 ──────────────────────────────────────────────────────────────
+  // OR_TC_30 
   test(
     'OR_TC_30 - Chặn nhập Chi phí khác âm @low @negative',
     async ({ page }) => {
@@ -622,7 +588,7 @@ test.describe('I. Chi phí khác', () => {
   );
 });
 
-// ─── J. TIỀN KHÁCH ĐƯA ──────────────────────────────────────────────────────
+// J. TIỀN KHÁCH ĐƯA 
 
 test.describe('J. Tiền khách đưa', () => {
   /** @type {OrderPage} */
@@ -636,7 +602,6 @@ test.describe('J. Tiền khách đưa', () => {
     if (!ok1 || !ok2) test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
     await op.setVAT(0, 0);
     await op.setVAT(1, 0);
-    // Tổng tiền = 200.000, KH phải trả = 200.000
   });
 
   // ── OR_TC_31 ──────────────────────────────────────────────────────────────
@@ -650,7 +615,7 @@ test.describe('J. Tiền khách đưa', () => {
     },
   );
 
-  // ── OR_TC_32 ──────────────────────────────────────────────────────────────
+  // OR_TC_32 
   test(
     'OR_TC_32 - Tiền thừa = 0 khi khách đưa đúng @medium @functional',
     async () => {
@@ -661,7 +626,7 @@ test.describe('J. Tiền khách đưa', () => {
     },
   );
 
-  // ── OR_TC_33 ──────────────────────────────────────────────────────────────
+  // OR_TC_33 
   test(
     'OR_TC_33 - Tiền khách đưa < KH phải trả @medium @functional',
     async ({ page }) => {
@@ -679,7 +644,7 @@ test.describe('J. Tiền khách đưa', () => {
   );
 });
 
-// ─── K. THAO TÁC DÒNG HÀNG ──────────────────────────────────────────────────
+// K. THAO TÁC DÒNG HÀNG 
 test.describe('K. Thao tác dòng hàng', () => {
   /** @type {OrderPage} */
   let op;
@@ -694,7 +659,7 @@ test.describe('K. Thao tác dòng hàng', () => {
     await op.setVAT(1, 0);
   });
 
-  // ── OR_TC_34 ──────────────────────────────────────────────────────────────
+  // OR_TC_34 
   test(
     'OR_TC_34 - Xóa sản phẩm khỏi đơn @high @functional',
     async ({ page }) => {
@@ -710,7 +675,7 @@ test.describe('K. Thao tác dòng hàng', () => {
     },
   );
 
-  // ── OR_TC_35 ──────────────────────────────────────────────────────────────
+  // OR_TC_35 
   test(
     'OR_TC_35 - Sửa Đơn giá trực tiếp trên dòng @high @functional',
     async () => {
@@ -719,23 +684,21 @@ test.describe('K. Thao tác dòng hàng', () => {
       const subtotal = await op.getRowSubtotalText(0);
       expect(subtotal).toMatch(/15[.,]?000/);
 
-      // KH phải trả = 15.000 + 150.000 = 165.000
       const mustPay = await op.getSidebarMustPay();
       expect(near(mustPay, 165000, 500)).toBe(true);
     },
   );
 });
 
-// ─── L. CASE ĐẶC THÙ — IMEI / LÔ-HSD ───────────────────────────────────────
+// ─── L. CASE ĐẶC THÙ — IMEI / LÔ-HSD 
 test.describe('L. Case đặc thù — Lô-HSD', () => {
-  // ── OR_TC_36 ──────────────────────────────────────────────────────────────
+  // ── OR_TC_36 
   test(
     'OR_TC_36 - Lô-HSD: nhập "Số lượng bán" > Tồn kho lô → báo "Số lượng bán nhiều hơn tồn kho" @high @negative',
     async ({ page }) => {
       const op = new OrderPage(page);
       await op.open();
 
-      // Precondition: Sữa CeraVe tồn kho lô = 5
       const ok = await addProduct(op, page, P.CERAVE.name);
       if (!ok) test.skip(true, `Không tìm thấy "${P.CERAVE.name}"`);
 
@@ -754,12 +717,10 @@ test.describe('L. Case đặc thù — Lô-HSD', () => {
       await lotBtn.click();
       await page.waitForTimeout(500);
 
-      // Chọn lô đầu tiên trong popup
       const popupLotRow = page.locator('[class*="popup"] tr, [class*="dialog"] tr, .v-dialog tr').first();
       await popupLotRow.waitFor({ state: 'visible', timeout: 5000 });
       await popupLotRow.click();
 
-      // Nhập số lượng bán = 6 (> tồn kho = 5)
       const lotQtyInput = page
         .locator('[class*="popup"] input, [class*="dialog"] input, .v-dialog input')
         .last();

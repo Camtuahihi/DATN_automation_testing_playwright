@@ -9,11 +9,6 @@ test.describe('UC05 - Chức năng Chuyển bàn', () => {
     tablePage = new TableManagementPage(page);
     await tablePage.goto('https://web.aibat.vn/phong-ban');
   });
-
-  /**
-   * TB_TC_01: Nút "Chuyển bàn" hiển thị khi bàn đang sử dụng
-   * Step: Nhấn chọn ‘Bàn 1’.
-   */
   test('TB_TC_01: Nút "Chuyển bàn" hiển thị khi bàn đang sử dụng', async ({ page }) => {
     const tableName = 'Bàn 1';
     const isBusy = await tablePage.isTableBusy(tableName);
@@ -24,10 +19,6 @@ test.describe('UC05 - Chức năng Chuyển bàn', () => {
     await expect(transferBtn.or(fallbackBtn)).toBeVisible({ timeout: 10000 });
   });
 
-  /**
-   * TB_TC_02: Nút "Chuyển bàn" KHÔNG hiển thị khi bàn trống
-   * Step: Nhấn chọn ‘Bàn 3’.
-   */
   test('TB_TC_02: Nút "Chuyển bàn" KHÔNG hiển thị khi bàn trống', async ({ page }) => {
     const tableName = 'Bàn 3';
     const isBusy = await tablePage.isTableBusy(tableName);

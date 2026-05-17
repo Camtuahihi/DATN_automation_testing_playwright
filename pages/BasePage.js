@@ -1,7 +1,3 @@
-/**
- * BasePage - Class cha cho tất cả Page Objects
- * Áp dụng mô hình Page Object Model (POM)
- */
 class BasePage {
   /**
    * @param {import('@playwright/test').Page} page
@@ -112,10 +108,6 @@ class BasePage {
   async pressKey(key) {
     await this.page.keyboard.press(key);
   }
-
-  /**
-   * Verify element có chứa text không
-   */
   async expectTextContains(selector, text) {
     const actualText = await this.getText(selector);
     if (!actualText.includes(text)) {

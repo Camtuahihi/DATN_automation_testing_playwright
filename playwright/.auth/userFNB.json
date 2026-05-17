@@ -2,60 +2,60 @@
   "cookies": [
     {
       "name": "browser_fingerprint",
-      "value": "fp_h1wqq6_qzb5",
+      "value": "fp_h1wqq6_5gtq",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1809640902,
+      "expires": 1810588881,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "fingerprint_created",
-      "value": "2026-05-06T22:01:42.210Z",
+      "value": "2026-05-17T21:21:21.519Z",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1809640902,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "_ga",
-      "value": "GA1.1.1424015366.1778104903",
-      "domain": ".aibat.vn",
-      "path": "/",
-      "expires": 1812664906.364563,
+      "expires": 1810588881,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_gcl_au",
-      "value": "1.1.1382818350.1778104903",
+      "value": "1.1.1543025872.1779052882",
       "domain": ".aibat.vn",
       "path": "/",
-      "expires": 1785880903,
+      "expires": 1786828882,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.2047286921.1779052882",
+      "domain": ".aibat.vn",
+      "path": "/",
+      "expires": 1813612883.685251,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "IDE",
-      "value": "AHWqTUkYxDRh9MNG9jccCQOPbfzeG0IRNty0VkT3q_jhRPXyn6jGGwgvWTNsa9nL",
+      "value": "AHWqTUmhkRMxYW9ZTjRNfFkWaxQH9LHuZ_nChQrQcexuJTkqj5FzQVXhYUBdTGSz",
       "domain": ".doubleclick.net",
       "path": "/",
-      "expires": 1812664902.950566,
+      "expires": 1813612882.890155,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "token",
-      "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmFpYmF0LnZuL2FwaS9sb2dpbiIsImlhdCI6MTc3ODEwNDkwNCwiZXhwIjoxODA5NjQwOTA0LCJuYmYiOjE3NzgxMDQ5MDQsImp0aSI6ImxOMm02STlINXlWZ1dFMUUiLCJzdWIiOiIxOTUzMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NUDg-UtC6GetBKzmLUlmVB09wLEHCp8FNDNbXWCernE",
+      "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLXFsYmgubTJzYWxlLmNvbS52bi9hcGkvbG9naW4iLCJpYXQiOjE3NzkwNTI4ODMsImV4cCI6MTgxMDU4ODg4MywibmJmIjoxNzc5MDUyODgzLCJqdGkiOiJMR1RsNmwwSWlkdERaNzNDIiwic3ViIjoiMTk1MzMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.p7CiOsJy9ok9ijc2U_0nVbLP6i85OjVIheHCfIKfXsI",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.513891,
+      "expires": 1813612883.407203,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -65,7 +65,7 @@
       "value": "12",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.514239,
+      "expires": 1813612883.407599,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -75,7 +75,7 @@
       "value": "5298048000",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.514483,
+      "expires": 1813612883.407663,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -85,7 +85,7 @@
       "value": "19533",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.514598,
+      "expires": 1813612883.407715,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -95,7 +95,7 @@
       "value": "0396486486",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.514705,
+      "expires": 1813612883.407769,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -105,7 +105,7 @@
       "value": "0",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.514815,
+      "expires": 1813612883.407813,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -115,7 +115,7 @@
       "value": "2",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.514926,
+      "expires": 1813612883.407858,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -125,7 +125,7 @@
       "value": "0",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.515485,
+      "expires": 1813612883.407903,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -135,7 +135,7 @@
       "value": "null",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.515895,
+      "expires": 1813612883.407948,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -145,7 +145,7 @@
       "value": "null",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.516092,
+      "expires": 1813612883.407996,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -155,7 +155,7 @@
       "value": "C%C3%A0%20ph%C3%AA%2C%20%C4%91%E1%BB%93%20u%E1%BB%91ng",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.516323,
+      "expires": 1813612883.408041,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -165,7 +165,7 @@
       "value": "false",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.516615,
+      "expires": 1813612883.408107,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -175,17 +175,17 @@
       "value": "2026-11-14",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.518608,
+      "expires": 1813612883.408171,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "using_days",
-      "value": "191",
+      "value": "180",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.519601,
+      "expires": 1813612883.408222,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -195,7 +195,7 @@
       "value": "A99",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.520786,
+      "expires": 1813612883.408273,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -205,7 +205,7 @@
       "value": "",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.520882,
+      "expires": 1813612883.408322,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -215,7 +215,7 @@
       "value": "b66b8d0b-807e-4882-ad4f-e24531519c13",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.520919,
+      "expires": 1813612883.408369,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -225,7 +225,7 @@
       "value": "",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521003,
+      "expires": 1813612883.408441,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -235,7 +235,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.52126,
+      "expires": 1813612883.408465,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -245,7 +245,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521362,
+      "expires": 1813612883.408521,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -255,7 +255,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521419,
+      "expires": 1813612883.408582,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -265,7 +265,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521477,
+      "expires": 1813612883.408631,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -275,7 +275,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521534,
+      "expires": 1813612883.40868,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -285,7 +285,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521586,
+      "expires": 1813612883.40873,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -295,7 +295,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521638,
+      "expires": 1813612883.408777,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -305,7 +305,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521689,
+      "expires": 1813612883.408838,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -315,7 +315,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521742,
+      "expires": 1813612883.408906,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -325,7 +325,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521818,
+      "expires": 1813612883.408975,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -335,7 +335,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.52191,
+      "expires": 1813612883.409029,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -345,7 +345,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.521963,
+      "expires": 1813612883.409082,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -355,7 +355,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522018,
+      "expires": 1813612883.409131,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -365,7 +365,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522074,
+      "expires": 1813612883.40918,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -375,7 +375,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.52213,
+      "expires": 1813612883.409241,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -385,7 +385,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522463,
+      "expires": 1813612883.409295,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -395,7 +395,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522532,
+      "expires": 1813612883.40935,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -405,7 +405,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522635,
+      "expires": 1813612883.409401,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -415,7 +415,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522699,
+      "expires": 1813612883.409466,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -425,7 +425,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522757,
+      "expires": 1813612883.409539,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -435,7 +435,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522815,
+      "expires": 1813612883.409591,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -445,7 +445,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522873,
+      "expires": 1813612883.409645,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -455,7 +455,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522931,
+      "expires": 1813612883.409699,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -465,7 +465,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.522992,
+      "expires": 1813612883.40975,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -475,7 +475,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523082,
+      "expires": 1813612883.409815,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -485,7 +485,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523159,
+      "expires": 1813612883.409868,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -495,7 +495,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523229,
+      "expires": 1813612883.40992,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -505,7 +505,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523289,
+      "expires": 1813612883.409994,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -515,7 +515,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523345,
+      "expires": 1813612883.410122,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -525,7 +525,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523401,
+      "expires": 1813612883.410182,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -535,7 +535,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523455,
+      "expires": 1813612883.410239,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -545,7 +545,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.52351,
+      "expires": 1813612883.410438,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -555,7 +555,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523614,
+      "expires": 1813612883.410571,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -565,7 +565,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523699,
+      "expires": 1813612883.410644,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -575,7 +575,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523755,
+      "expires": 1813612883.410734,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -585,7 +585,7 @@
       "value": "false",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523814,
+      "expires": 1813612883.410811,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -595,7 +595,7 @@
       "value": "%2Cview_all_supplier%2Ccreate_supplier%2Cdelete_supplier%2Cview_all_category%2Ccreate_category%2Cdelete_category%2Cview_all_product%2Ccreate_product%2Cdelete_product%2Clist_order%2Cupdate_status_order%2Cupdate_order%2Ccreate_order%2Cdelete_order%2Clist_storage%2Clist_product_storage%2Cdetail_product%2Cupdate_product%2Cdetail_order%2Cview_all_brand%2Ccreate_brand%2Cdelete_brand%2Clist_dashboard_report%2Clist_aggregate_report%2Ccreate_receipt_rp%2Ccreate_payment_rp%2Clist_payment_rp%2Clist_receipt_rp%2Clist_receipt_type%2Ccreate_receipt_type%2Cupdate_receipt_type%2Cdetail_receipt_type%2Cdelete_receipt_type%2Clist_employee%2Ccreate_employee%2Cupdate_employee%2Cdetail_employee%2Cdelete_employee%2Cgenerate_barcode_product%2Clist_inventories%2Ccreate_inventories%2Cdetail_inventories%2Cupdate_inventories%2Cdelete_inventories%2Clist_receipt_payment_report%2Clist_profit_loss_report%2Cprint_inventories%2Cin_payment_rp%2Cin_receipt_rp%2Cview_all_customeg%2Ccreate_customeg%2Cupdate_customeg%2Cdetail_customeg%2Cdelete_customeg%2Clist_storage_report%2Clist_area%2Ccreate_area%2Cupdate_area%2Cdelete_area%2Clist_room%2Ccreate_room%2Cupdate_room%2Cdelete_room%2Clist_group_customers%2Ccreate_group_customers%2Cupdate_group_customers%2Cdelete_group_customers%2Clist_notify%2Cdetail_notify%2Cservice_config%2Cview_base_cost_product%2Cview_entry_cost_product%2Cview_wholesale_cost_product%2Cview_retail_cost_product%2Cdetail_ordesbuy%2Clist_ordesbuy%2Cupdate_status_ordesbuy%2Cupdate_ordesbuy%2Ccreate_ordesbuy%2Cdelete_ordesbuy%2Cconfig_work%2Cview_work%2Clist_theme%2Ccreate_theme%2Ccreate_refund_order%2Ccreate_refund_ordesbuy%2Cupdate_cost_inventories%2Clist_supplier_report%2Clist_customer_report%2Cdebt_customeg%2Clist_task%2Ccreate_task%2Cupdate_task%2Ccreate_location%2Cview_all_open_customeg%2Clist_rules%2Ccreate_rules%2Cdelete_rules%2Cschedule_visit%2Clist_profit_report%2Clist_shifts%2Copen_shifts%2Cclose_shifts%2Csummary_shifts%2Ccreate_commission_by_product%2Ctransfer_storage%2Cedit_success_order%2Cke_khai_thue_report%2Ccancel_order%2Ctotal_price_all_product%2C",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523874,
+      "expires": 1813612883.410906,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -605,7 +605,7 @@
       "value": "%2CDEFAULT%2C",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.523999,
+      "expires": 1813612883.411106,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -615,7 +615,7 @@
       "value": "2",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.526927,
+      "expires": 1813612883.412857,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -625,7 +625,7 @@
       "value": "-1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.638447,
+      "expires": 1813612883.49258,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -635,7 +635,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.646728,
+      "expires": 1813612883.518406,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -645,7 +645,7 @@
       "value": "1",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.647209,
+      "expires": 1813612883.518689,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -655,17 +655,17 @@
       "value": "%C4%91%E1%BB%93ng",
       "domain": "web.aibat.vn",
       "path": "/",
-      "expires": 1812664904.647388,
+      "expires": 1813612883.518759,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_ga_1DZBXXN9G7",
-      "value": "GS2.1.s1778104902$o1$g1$t1778104906$j56$l0$h0",
+      "value": "GS2.1.s1779052881$o1$g1$t1779052883$j58$l0$h0",
       "domain": ".aibat.vn",
       "path": "/",
-      "expires": 1812664906.36277,
+      "expires": 1813612883.773883,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -677,7 +677,7 @@
       "localStorage": [
         {
           "name": "_gcl_ls",
-          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1778104902555},\"expires\":1785880902555}}"
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1779052881663},\"expires\":1786828881663}}"
         },
         {
           "name": "app_state",

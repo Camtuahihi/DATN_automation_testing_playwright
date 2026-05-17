@@ -7,7 +7,7 @@ const path = require('path');
 
 const FIXTURES = path.join(__dirname, 'fixtures');
 
-// ─── A. KIỂM TRA GIAO DIỆN ────────────────────────────────────────────────
+//A. KIỂM TRA GIAO DIỆN
 
 test.describe('A. Kiểm tra giao diện', () => {
   test('CP_TC_01 - Hiển thị form Tạo sản phẩm với đầy đủ nhóm thông tin @high @smoke @ui',
@@ -17,23 +17,19 @@ test.describe('A. Kiểm tra giao diện', () => {
       await pp.openCreateForm();
 
       await expect(pp.formContainer).toBeVisible();
-      // section headers thực tế trong form
       await expect(pp.formContainer.locator('text=Thông tin chung').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Giá sản phẩm').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=VAT').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Chính sách giá').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Thông tin bổ sung').first()).toBeVisible();
-      // Quản lý nâng cao
       await expect(pp.formContainer.locator('text=Sản phẩm Imei').first()).toBeVisible();
       await expect(pp.formContainer.locator('text=Sản phẩm combo').first()).toBeVisible();
-      // Tên sản phẩm có dấu (*) bắt buộc
       await expect(pp.formContainer.locator('text=Tên sản phẩm').first()).toContainText('*');
     }
   );
 
   test('CP_TC_02 - Người dùng không có quyền không thấy nút Thêm sản phẩm @high @security',
     async ({ page }) => {
-      // Precondition: cần tài khoản nhân viên không có quyền Tạo sản phẩm
       test.skip(true, 'Cần tài khoản nhân viên không có quyền Tạo sản phẩm');
       const pp = new ProductPage(page);
       await pp.open();
@@ -43,7 +39,7 @@ test.describe('A. Kiểm tra giao diện', () => {
  
 });
 
-// ─── B. VALIDATION TRƯỜNG "TÊN SẢN PHẨM" ─────────────────────────────────
+//B. VALIDATION TRƯỜNG "TÊN SẢN PHẨM"
 
 test.describe('B. Validation trường Tên sản phẩm', () => {
   /** @type {ProductPage} */
@@ -64,8 +60,6 @@ test.describe('B. Validation trường Tên sản phẩm', () => {
 
   test('CP_TC_04 - Tạo sản phẩm thành công với Tên sản phẩm 149 ký tự @high @boundary',
     async ({ page }) => {
-      //expect(TD.NAMES.len149.length).toBe(149);
-      //const name = TD.NAMES.len149.slice(0, 140) + '_' + Date.now().toString().slice(-7);
       await pp.fillName('Sản phẩm mẫu cao cấp phiên bản giới hạn 2026 tích hợp công nghệ AI mới giúp tối ưu hóa hiệu suất người dùng trong điều kiện thời tiết thực tế 1234567');
       await pp.save();
       await pp.expectSuccessToast();
@@ -74,8 +68,6 @@ test.describe('B. Validation trường Tên sản phẩm', () => {
 
   test('CP_TC_05 - Tạo sản phẩm thành công với Tên sản phẩm 150 ký tự (biên trên hợp lệ) @high @boundary',
     async ({ page }) => {
-      //expect(TD.NAMES.len150.length).toBe(150);
-      //const name = TD.NAMES.len150.slice(0, 141) + '_' + Date.now().toString().slice(-7);
       await pp.fillName('Sản phẩm mẫu cao cấp phiên bản giới hạn 2026 tích hợp công nghệ AI mới giúp tối ưu hóa hiệu suất người dùng trong điều kiện thời tiết thực tế 12345678');
       await pp.save();
       await pp.expectSuccessToast();
@@ -84,8 +76,6 @@ test.describe('B. Validation trường Tên sản phẩm', () => {
 
   test('CP_TC_06 - Tạo sản phẩm thất bại với Tên sản phẩm 151 ký tự (vượt biên) @high @boundary',
     async ({ page }) => {
-      //expect(TD.NAMES.len151.length).toBe(151);
-      //await pp.fillName(TD.NAMES.len151);
       await pp.fillName('Sản phẩm mẫu cao cấp phiên bản giới hạn 2026 tích hợp công nghệ AI mới giúp tối ưu hóa hiệu suất người dùng trong điều kiện thời tiết thực tế 123456789');
       await pp.save();
       await expect(
@@ -97,7 +87,6 @@ test.describe('B. Validation trường Tên sản phẩm', () => {
 
   test('CP_TC_07 - Tên sản phẩm cho phép chứa ký tự đặc biệt và Unicode @medium @functional',
     async ({ page }) => {
-      //const name = TD.NAMES.unicode + '_' + Date.now().toString().slice(-4);
       await pp.fillName('Ống nhựa PVC 90° & Ø 21mm');
       await pp.save();
       await pp.expectSuccessToast();
@@ -105,7 +94,7 @@ test.describe('B. Validation trường Tên sản phẩm', () => {
   );
 });
 
-// ─── C. VALIDATION SKU & BARCODE ──────────────────────────────────────────
+//C. VALIDATION SKU & BARCODE 
 
 test.describe('C. Validation SKU & Barcode', () => {
   /** @type {ProductPage} */
@@ -137,8 +126,6 @@ test.describe('C. Validation SKU & Barcode', () => {
     async ({ page }) => {
       await pp.fillName(TD.uniqueName('ABC'));
       await pp.fillBarcode(TD.EXISTING_DATA.duplicateBarcode); 
-      // await pp.fillName('ABC');
-      // await pp.fillBarcode('2004281469011');
       await pp.save();
       await expect(page.locator('text=bar_code Đã tồn tại')).toBeVisible();
     }
@@ -153,7 +140,7 @@ test.describe('C. Validation SKU & Barcode', () => {
       expect(sku255.length).toBe(255);
 
       await pp.fillName(TD.uniqueName('ABC'));
-      await pp.fillSku(sku255); // SKU này bây giờ sẽ không bao giờ trùng
+      await pp.fillSku(sku255);
       await pp.save();
       await pp.expectSuccessToast();
     }
@@ -171,7 +158,7 @@ test.describe('C. Validation SKU & Barcode', () => {
   );
 });
 
-// ─── D. VALIDATION TRỌNG LƯỢNG & ĐƠN VỊ ─────────────────────────────────
+//D. VALIDATION TRỌNG LƯỢNG & ĐƠN VỊ
 
 test.describe('D. Validation trọng lượng & đơn vị', () => {
   /** @type {ProductPage} */
@@ -194,7 +181,6 @@ test.describe('D. Validation trọng lượng & đơn vị', () => {
     'CP_TC_14 - Trọng lượng thập phân: lưu và hiển thị đồng bộ giữa DB và UI @high @functional',
     async ({ page }) => {
       await pp.fillName(TD.uniqueName('ABC'));
-      // await pp.fillName('ABC');
       await pp.fillWeight('12.5');
       await pp.save();
       await pp.expectSuccessToast();
@@ -217,8 +203,7 @@ test.describe('D. Validation trọng lượng & đơn vị', () => {
   );
 });
 
-// ─── E. VALIDATION CHIẾT KHẤU & HOA HỒNG ────────────────────────────────
-
+//E. VALIDATION CHIẾT KHẤU ────────────────────────────────
 test.describe('E. Validation chiết khấu & hoa hồng', () => {
   /** @type {ProductPage} */
   let pp;
@@ -279,7 +264,7 @@ test.describe('E. Validation chiết khấu & hoa hồng', () => {
   });
 });
 
-// ─── F. VALIDATION CÁC TRƯỜNG GIÁ ────────────────────────────────────────
+//F. VALIDATION CÁC TRƯỜNG GIÁ 
 
 test.describe('F. Validation các trường giá', () => {
   /** @type {ProductPage} */
@@ -361,7 +346,7 @@ test.describe('F. Validation các trường giá', () => {
   );
 });
 
-// ─── G. VALIDATION VAT ────────────────────────────────────────────────────
+// G. VALIDATION VAT
 
 test.describe('G. Validation VAT', () => {
   /** @type {ProductPage} */
@@ -409,7 +394,7 @@ test.describe('G. Validation VAT', () => {
   
 });
 
-// ─── I. CÁC TÙY CHỌN QUẢN LÝ NÂNG CAO ───────────────────────────────────
+//I. CÁC TÙY CHỌN QUẢN LÝ NÂNG CAO 
 
 test.describe('I. Quản lý nâng cao', () => {
   /** @type {ProductPage} */
@@ -449,7 +434,7 @@ test.describe('I. Quản lý nâng cao', () => {
   );
 });
 
-// ─── J. KHỞI TẠO KHO HÀNG ────────────────────────────────────────────────
+//J. KHỞI TẠO KHO HÀNG
 
 test.describe('J. Khởi tạo kho hàng', () => {
   test('CP_TC_33 - Khởi tạo tồn kho ban đầu cho sản phẩm thường @high @functional',
@@ -466,7 +451,7 @@ test.describe('J. Khởi tạo kho hàng', () => {
   );
 });
 
-// ─── K. UPLOAD HÌNH ẢNH ───────────────────────────────────────────────────
+//K. UPLOAD HÌNH ẢNH
 
 test.describe('K. Upload hình ảnh sản phẩm', () => {
   /** @type {ProductPage} */
@@ -534,7 +519,7 @@ test.describe('K. Upload hình ảnh sản phẩm', () => {
   );
 });
 
-// ─── L. THÔNG TIN BỔ SUNG ─────────────────────────────────────────────────
+//L. THÔNG TIN BỔ SUNG
 
 test.describe('L. Thông tin bổ sung', () => {
   /** @type {ProductPage} */
@@ -547,7 +532,6 @@ test.describe('L. Thông tin bổ sung', () => {
 
   test('CP_TC_38 - Kiểm tra tính năng lọc ký tự tại ô Thời hạn bảo hành @low @validation',
       async ({ page }) => {  
-        // 2. Click vào ô Thời hạn bảo hành để bắt đầu nhập
         await pp.warrantyInput.click();
         await page.keyboard.type('abc!@#');
         const valAfterAlpha = await pp.warrantyInput.inputValue();
@@ -586,8 +570,7 @@ test.describe('L. Thông tin bổ sung', () => {
   );
 });
 
-// ─── M. THAO TÁC FORM ─────────────────────────────────────────────────────
-
+//M. THAO TÁC FORM 
 test.describe('M. Thao tác form', () => {
   /** @type {ProductPage} */
   let pp;
@@ -618,7 +601,6 @@ test.describe('M. Thao tác form', () => {
     async ({ page }) => {
       await pp.fillName('Sản phẩm sẽ bị hủy');
       await pp.cancel();
-      //await pp.expectFormHidden();
 
       await pp.openCreateForm();
       await expect(pp.nameInput).toHaveValue('');
@@ -626,16 +608,10 @@ test.describe('M. Thao tác form', () => {
   );
 });
 
-// ─── M. LỖI MẠNG / HỆ THỐNG ──────────────────────────────────────────────
-
+//M. LỖI MẠNG / HỆ THỐNG
 test.describe('M. Lỗi mạng / hệ thống', () => {
   test('CP_TC_43 - Hệ thống xử lý gracefully khi mất Internet lúc nhấn Lưu @high @negative @network',
     async ({ page, context }) => {
-      test.skip(true,
-        'context.setOffline(true) khiến toàn bộ Vue SPA mất kết nối và trang trắng, ' +
-        'không hiển thị toast lỗi. Cần dùng page.route() để chặn đúng API call lưu sản phẩm.'
-      );
-
       const pp = new ProductPage(page);
       await pp.open();
       await pp.openCreateForm();
@@ -643,11 +619,10 @@ test.describe('M. Lỗi mạng / hệ thống', () => {
 
       await context.setOffline(true);
       await pp.save();
-      await expect(page.locator('text=Có lỗi xảy ra')).toBeVisible({ timeout: 15000 });
+      await expect(page.locator('text=Có lỗi xảy ra, vui lòng thử lại')).toBeVisible({ timeout: 15000 });
 
       await expect(pp.nameInput).not.toHaveValue('');
 
-      // Bật lại mạng và lưu lần 2
       await context.setOffline(false);
       await pp.save();
       await pp.expectSuccessToast();

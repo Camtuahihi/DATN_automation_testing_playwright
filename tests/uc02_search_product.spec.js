@@ -199,20 +199,29 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
     'FP_TC_10 - Tìm không phân biệt chữ hoa/thường thành công @high @functional',
     async ({ page }) => {
       await op.searchInput.fill('Lòng xào dưa');
-      await page.waitForTimeout(800);
+      await Promise.race([
+        op.productDropdown.first().waitFor({ state: 'visible', timeout: 5000 }),
+        op.noDataMessage.waitFor({ state: 'visible', timeout: 5000 }),
+      ]).catch(() => {});
 
       if (await op.noDataMessage.isVisible()) {
         test.skip(true, 'Sản phẩm "Lòng xào dưa" chưa có trong môi trường test');
       }
 
       const baseCount = await op.productDropdown.count();
+      if (baseCount === 0) {
+        test.skip(true, 'Không có kết quả nào cho "Lòng xào dưa", bỏ qua test');
+      }
       await op.clearSearch();
       await page.waitForTimeout(400);
 
       const variations = ['lòng xào dưa', 'LÒNG XÀO DƯA', 'LòNg Xào DưA'];
       for (const kw of variations) {
         await op.searchInput.fill(kw);
-        await page.waitForTimeout(800);
+        await Promise.race([
+          op.productDropdown.first().waitFor({ state: 'visible', timeout: 5000 }),
+          op.noDataMessage.waitFor({ state: 'visible', timeout: 5000 }),
+        ]).catch(() => {});
         const count = await op.productDropdown.count();
         expect(count).toBe(baseCount);
         await op.clearSearch();
