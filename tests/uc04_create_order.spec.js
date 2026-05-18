@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 const { OrderPage } = require('../pages/OrderPage');
-const { P } = require('../data/productData');
+const { P } = require('../data/orderData');
 
 /** @param {import('@playwright/test').Page} page */
 async function waitForDropdownResponse(page) {

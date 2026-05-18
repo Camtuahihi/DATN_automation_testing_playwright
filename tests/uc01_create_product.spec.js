@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 const { ProductPage } = require('../pages/ProductPage');
 const { LoginPage } = require('../pages/LoginPage');
-const TD = require('../data/01-test-data');
+const TD = require('../data/productData');
 const path = require('path');
 
 const FIXTURES = path.join(__dirname, 'fixtures');
@@ -159,7 +159,6 @@ test.describe('C. Validation SKU & Barcode', () => {
 });
 
 //D. VALIDATION TRỌNG LƯỢNG & ĐƠN VỊ
-
 test.describe('D. Validation trọng lượng & đơn vị', () => {
   /** @type {ProductPage} */
   let pp;
