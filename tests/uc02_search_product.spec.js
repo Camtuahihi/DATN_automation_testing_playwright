@@ -2,7 +2,6 @@
 const { test, expect } = require('@playwright/test');
 const { OrderPage } = require('../pages/OrderPage');
 
-// ─── A. HIỂN THỊ MẶC ĐỊNH ─────────────────────────────────────────────────
 test.describe('A. Hiển thị mặc định', () => {
   /** @type {OrderPage} */
   let op;
@@ -12,7 +11,6 @@ test.describe('A. Hiển thị mặc định', () => {
     await op.open();
   });
 
-  // ── FP_TC_01 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_01 - Khung tìm kiếm và tab Nhóm mặt hàng hiển thị ngay khi vào màn Tạo đơn bán hàng @high @smoke @ui',
     async ({ page }) => {
@@ -33,7 +31,6 @@ test.describe('A. Hiển thị mặc định', () => {
     },
   );
 
-  // ── FP_TC_02 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_02 - Click vào khung tìm kiếm khi chưa nhập từ khóa hiển thị danh sách sản phẩm đầy đủ @high @smoke @ui',
     async ({ page }) => {
@@ -49,7 +46,6 @@ test.describe('A. Hiển thị mặc định', () => {
     },
   );
 
-  // ── FP_TC_03 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_03 - Mỗi dòng kết quả hiển thị đủ 5 trường: Tên, Mã, Giá bán lẻ, Có thể bán, Loại sản phẩm @high @ui',
     async () => {
@@ -72,7 +68,6 @@ test.describe('A. Hiển thị mặc định', () => {
     },
   );
 
-  // ── FP_TC_04 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_04 - Click ra ngoài khung tìm kiếm đóng dropdown @medium @ui',
     async ({ page }) => {
@@ -88,9 +83,6 @@ test.describe('A. Hiển thị mặc định', () => {
   );
 });
 
-// ─── B. RÀNG BUỘC SỐ KÝ TỰ TỐI THIỂU ────────────────────────────────────
-// Condition ID: FP_02 — Ngưỡng ký tự tối thiểu để kích hoạt truy vấn (≥ 2 ký tự)
-
 test.describe('B. Ràng buộc số ký tự tối thiểu', () => {
   /** @type {OrderPage} */
   let op;
@@ -102,7 +94,6 @@ test.describe('B. Ràng buộc số ký tự tối thiểu', () => {
     await op.expectResultsVisible();
   });
 
-  // ── FP_TC_05 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_05 - Nhập 01 ký tự không kích hoạt truy vấn, dropdown hiển thị "Không có dữ liệu" @high @functional',
     async ({ page }) => {
@@ -116,7 +107,6 @@ test.describe('B. Ràng buộc số ký tự tối thiểu', () => {
     },
   );
 
-  // ── FP_TC_06 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_06 - Nhập đủ 02 ký tự kích hoạt truy vấn, dropdown hiển thị sản phẩm (khác với trạng thái 1 ký tự) @high @boundary',
     async ({ page }) => {
@@ -132,7 +122,6 @@ test.describe('B. Ràng buộc số ký tự tối thiểu', () => {
     },
   );
 
-  // ── FP_TC_07 ──────────────────────────────────────────────────────────────
 test(
     'FP_TC_07 - Xóa bớt còn 1 ký tự, dropdown hiển thị "Không có dữ liệu" @high @functional',
     async ({ page }) => {
@@ -140,14 +129,11 @@ test(
       await op.productDropdown.first().waitFor({ state: 'visible', timeout: 5000 });
       await op.searchInput.press('Backspace');
       await expect(op.productDropdown.first()).toBeHidden({ timeout: 5000 });
-
-      //expect(await op.getSearchValue()).toBe('b');
       await expect(op.noDataMessage).toBeVisible();
     },
   );
 });
 
-// ─── C. TÌM KIẾM THEO TÊN SẢN PHẨM ─────────────────────────────────────────
 test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
   /** @type {OrderPage} */
   let op;
@@ -159,7 +145,6 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
     await op.expectResultsVisible();
   });
 
-  // ── FP_TC_08 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_08 - Tìm theo tên đầy đủ của sản phẩm @high @functional',
     async ({ page }) => {
@@ -176,7 +161,6 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
     },
   );
 
-  // ── FP_TC_09 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_09 - Tìm theo một phần tên (substring match) @high @functional',
     async ({ page }) => {
@@ -193,8 +177,6 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
     },
   );
   
-
-  // ── FP_TC_10 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_10 - Tìm không phân biệt chữ hoa/thường thành công @high @functional',
     async ({ page }) => {
@@ -230,7 +212,6 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
     },
   );
 
-  // ── FP_TC_11 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_11 - Tìm với ký tự đặc biệt trong tên thành công @medium @functional',
     async ({ page }) => {
@@ -250,7 +231,6 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
     },
   );
 
-  // ── FP_TC_12 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_12 - Tìm với keyword tiếng Việt không dấu thành công @low @functional',
     async ({ page }) => {
@@ -264,7 +244,6 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
     },
   );
 
-  // ── FP_TC_13 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_13 - Tìm với khoảng trắng đầu/cuối, hệ thống tự trim và trả kết quả thành công @low @functional',
     async ({ page }) => {
@@ -285,7 +264,6 @@ test.describe('C. Tìm kiếm theo tên sản phẩm', () => {
   );
 });
 
-// ─── D. TÌM KIẾM THEO MÃ SẢN PHẨM (SKU) ────────────────────────────────────
 test.describe('D. Tìm kiếm theo mã sản phẩm (SKU)', () => {
   /** @type {OrderPage} */
   let op;
@@ -297,7 +275,6 @@ test.describe('D. Tìm kiếm theo mã sản phẩm (SKU)', () => {
     await op.expectResultsVisible();
   });
 
-  // ── FP_TC_14 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_14 - Tìm chính xác theo mã đầy đủ, sản phẩm có mã đó hiển thị thành công @high @functional',
     async ({ page }) => {
@@ -317,7 +294,6 @@ test.describe('D. Tìm kiếm theo mã sản phẩm (SKU)', () => {
     },
   );
 
-  // ── FP_TC_15 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_15 - Tìm theo một phần mã (substring), sản phẩm có mã chứa chuỗi đó hiển thị thành công @high @functional',
     async ({ page }) => {
@@ -337,7 +313,6 @@ test.describe('D. Tìm kiếm theo mã sản phẩm (SKU)', () => {
     },
   );
 
-  // ── FP_TC_16 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_16 - Tìm theo mã có chứa chữ cái thành công @medium @functional',
     async ({ page }) => {
@@ -358,7 +333,6 @@ test.describe('D. Tìm kiếm theo mã sản phẩm (SKU)', () => {
   );
 });
 
-// ─── E. KẾT QUẢ TRỐNG (NO RESULT) ──────────────────────────────────────────
 test.describe('E. Kết quả trống (No Result)', () => {
   /** @type {OrderPage} */
   let op;
@@ -370,7 +344,6 @@ test.describe('E. Kết quả trống (No Result)', () => {
     await op.expectResultsVisible();
   });
 
-  // ── FP_TC_17 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_17 - Hiển thị "Không có dữ liệu" khi từ khóa không khớp bất kỳ sản phẩm nào @high @negative',
     async ({ page }) => {
@@ -382,7 +355,6 @@ test.describe('E. Kết quả trống (No Result)', () => {
     },
   );
 
-  // ── FP_TC_18 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_18 - Hiển thị "Không có dữ liệu" khi tab nhóm mặt hàng không có sản phẩm @medium @negative',
     async () => {
@@ -391,7 +363,6 @@ test.describe('E. Kết quả trống (No Result)', () => {
   );
 });
 
-// ─── F. LỌC THEO NHÓM MẶT HÀNG ─────────────────────────────────────────────
 test.describe('F. Lọc theo nhóm mặt hàng', () => {
   /** @type {OrderPage} */
   let op;
@@ -403,7 +374,6 @@ test.describe('F. Lọc theo nhóm mặt hàng', () => {
     await op.expectResultsVisible();
   });
 
-  // ── FP_TC_19 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_19 - Nhấn tab nhóm, dropdown chỉ hiển thị sản phẩm thuộc nhóm đó @high @functional',
     async ({ page }) => {
@@ -420,7 +390,6 @@ test.describe('F. Lọc theo nhóm mặt hàng', () => {
     },
   );
 
-  // ── FP_TC_20 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_20 - Tab nhóm có thể scroll ngang khi số lượng tab vượt chiều ngang màn hình @medium @ui',
     async ({ page }) => {
@@ -437,7 +406,6 @@ test.describe('F. Lọc theo nhóm mặt hàng', () => {
   );
 });
 
-// ─── G. KẾT HỢP TÌM KIẾM + LỌC NHÓM ───────────────────────────────────────
 test.describe('G. Kết hợp tìm kiếm và lọc nhóm', () => {
   /** @type {OrderPage} */
   let op;
@@ -449,7 +417,6 @@ test.describe('G. Kết hợp tìm kiếm và lọc nhóm', () => {
     await op.expectResultsVisible();
   });
 
-  // ── FP_TC_21 ──────────────────────────────────────────────────────────────
   test(
       'FP_TC_21 - Tìm kiếm trong tab nhóm, chỉ hiển thị sản phẩm thuộc nhóm VÀ khớp từ khóa @high @functional',
       async ({ page }) => {
@@ -470,11 +437,10 @@ test.describe('G. Kết hợp tìm kiếm và lọc nhóm', () => {
       },
     );
 
-// ── FP_TC_22 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_22 - Sản phẩm khớp từ khóa nhưng không thuộc nhóm đang lọc KHÔNG hiển thị @high @functional',
     async ({ page }) => {
-      const keyword = 'Cá thu'; // Từ khóa mục tiêu
+      const keyword = 'Cá thu'; 
       const groupALL = 'Tất cả';
       const groupSpecific = 'Thực phẩm Tươi sống & Nông sản';
 
@@ -502,7 +468,6 @@ test.describe('G. Kết hợp tìm kiếm và lọc nhóm', () => {
   );
 });
 
-// ─── H. XÓA TỪ KHÓA / RESET ─────────────────────────────────────────────────
 test.describe('H. Xóa từ khóa / Reset', () => {
   /** @type {OrderPage} */
   let op;
@@ -517,7 +482,6 @@ test.describe('H. Xóa từ khóa / Reset', () => {
     fullCount = await op.productDropdown.count();
   });
 
-  // ── FP_TC_23 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_23 - Xóa toàn bộ ký tự trong ô tìm kiếm, danh sách trở về đầy đủ @high @functional',
     async ({ page }) => {
@@ -537,7 +501,6 @@ test.describe('H. Xóa từ khóa / Reset', () => {
   );
 });
 
-// ─── I. BẢO MẬT ──────────────────────────────────────────────
 test.describe('I. Bảo mật', () => {
   /** @type {OrderPage} */
   let op;
@@ -547,7 +510,6 @@ test.describe('I. Bảo mật', () => {
     await op.open();
   });
 
-  // ── FP_TC_24 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_24 - Nhập XSS payload vào ô tìm kiếm, hệ thống không thực thi script @high @security',
     async ({ page }) => {
@@ -569,19 +531,16 @@ test.describe('I. Bảo mật', () => {
   );
 });
 
-// ─── J. XỬ LÝ MẤT KẾT NỐI MẠNG ────────────────────────────────────────────
 test.describe('J. Xử lý mất kết nối mạng', () => {
   test(
     'FP_TC_25 - Mất kết nối Internet khi tìm kiếm @medium @negative',
     async ({ context, page }) => {
-      //test.skip(true, 'Yêu cầu thao tác ngắt kết nối mạng thủ công — không tự động hóa trong môi trường CI');
       await context.setOffline(true);
       const errorPopup = page.getByText('Bạn đang offline. Đơn hàng sẽ được lưu tạm và tự động gửi khi có mạng.');
     },
   );
 });
 
-// ─── K. DATA ĐẶC BIỆT ──────────────────────────────────────
 test.describe('K. Data đặc biệt', () => {
   /** @type {OrderPage} */
   let op;
@@ -593,7 +552,6 @@ test.describe('K. Data đặc biệt', () => {
     await op.expectResultsVisible();
   });
 
-  // ── FP_TC_26 ──────────────────────────────────────────────────────────────
   test(
     'FP_TC_26 - Sản phẩm trạng thái "Ngừng bán" không hiển thị trong dropdown tìm kiếm @high @functional',
     async ({ page }) => {

@@ -7,8 +7,6 @@ const path = require('path');
 
 const FIXTURES = path.join(__dirname, 'fixtures');
 
-//A. KIỂM TRA GIAO DIỆN
-
 test.describe('A. Kiểm tra giao diện', () => {
   test('CP_TC_01 - Hiển thị form Tạo sản phẩm với đầy đủ nhóm thông tin @high @smoke @ui',
     async ({ page }) => {
@@ -38,8 +36,6 @@ test.describe('A. Kiểm tra giao diện', () => {
   );
  
 });
-
-//B. VALIDATION TRƯỜNG "TÊN SẢN PHẨM"
 
 test.describe('B. Validation trường Tên sản phẩm', () => {
   /** @type {ProductPage} */
@@ -93,8 +89,6 @@ test.describe('B. Validation trường Tên sản phẩm', () => {
     }
   );
 });
-
-//C. VALIDATION SKU & BARCODE 
 
 test.describe('C. Validation SKU & Barcode', () => {
   /** @type {ProductPage} */
@@ -158,7 +152,7 @@ test.describe('C. Validation SKU & Barcode', () => {
   );
 });
 
-//D. VALIDATION TRỌNG LƯỢNG & ĐƠN VỊ
+
 test.describe('D. Validation trọng lượng & đơn vị', () => {
   /** @type {ProductPage} */
   let pp;
@@ -202,7 +196,6 @@ test.describe('D. Validation trọng lượng & đơn vị', () => {
   );
 });
 
-//E. VALIDATION CHIẾT KHẤU ────────────────────────────────
 test.describe('E. Validation chiết khấu & hoa hồng', () => {
   /** @type {ProductPage} */
   let pp;
@@ -263,8 +256,6 @@ test.describe('E. Validation chiết khấu & hoa hồng', () => {
   });
 });
 
-//F. VALIDATION CÁC TRƯỜNG GIÁ 
-
 test.describe('F. Validation các trường giá', () => {
   /** @type {ProductPage} */
   let pp;
@@ -305,7 +296,6 @@ test.describe('F. Validation các trường giá', () => {
       await pp.expectSuccessToast();
     }
   );
-
   test('CP_TC_23 - Tạo sản phẩm thành công với các giá kiểu thập phân @medium @functional',
     async ({ page }) => {
       await pp.fillName(TD.uniqueName('ABC'));
@@ -316,8 +306,6 @@ test.describe('F. Validation các trường giá', () => {
       await pp.expectSuccessToast();
     }
   );
-
-
   test('CP_TC_24 - Chặn nhập giá trị âm tại các ô giá @high @boundary', async ({ page }) => {
     const priceInputs = [
       { name: 'Giá vốn', locator: pp.baseCostInput },
@@ -344,8 +332,6 @@ test.describe('F. Validation các trường giá', () => {
     }
   );
 });
-
-// G. VALIDATION VAT
 
 test.describe('G. Validation VAT', () => {
   /** @type {ProductPage} */
@@ -393,8 +379,6 @@ test.describe('G. Validation VAT', () => {
   
 });
 
-//I. CÁC TÙY CHỌN QUẢN LÝ NÂNG CAO 
-
 test.describe('I. Quản lý nâng cao', () => {
   /** @type {ProductPage} */
   let pp;
@@ -433,8 +417,6 @@ test.describe('I. Quản lý nâng cao', () => {
   );
 });
 
-//J. KHỞI TẠO KHO HÀNG
-
 test.describe('J. Khởi tạo kho hàng', () => {
   test('CP_TC_33 - Khởi tạo tồn kho ban đầu cho sản phẩm thường @high @functional',
     async ({ page }) => {
@@ -449,8 +431,6 @@ test.describe('J. Khởi tạo kho hàng', () => {
     }
   );
 });
-
-//K. UPLOAD HÌNH ẢNH
 
 test.describe('K. Upload hình ảnh sản phẩm', () => {
   /** @type {ProductPage} */
@@ -518,8 +498,6 @@ test.describe('K. Upload hình ảnh sản phẩm', () => {
   );
 });
 
-//L. THÔNG TIN BỔ SUNG
-
 test.describe('L. Thông tin bổ sung', () => {
   /** @type {ProductPage} */
   let pp;
@@ -569,7 +547,6 @@ test.describe('L. Thông tin bổ sung', () => {
   );
 });
 
-//M. THAO TÁC FORM 
 test.describe('M. Thao tác form', () => {
   /** @type {ProductPage} */
   let pp;
@@ -607,7 +584,6 @@ test.describe('M. Thao tác form', () => {
   );
 });
 
-//M. LỖI MẠNG / HỆ THỐNG
 test.describe('M. Lỗi mạng / hệ thống', () => {
   test('CP_TC_43 - Hệ thống xử lý gracefully khi mất Internet lúc nhấn Lưu @high @negative @network',
     async ({ page, context }) => {

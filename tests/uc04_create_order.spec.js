@@ -13,7 +13,6 @@ async function waitForDropdownResponse(page) {
 }
 
 /**
- * Thêm sản phẩm vào đơn; trả về false nếu không tìm thấy.
  * @param {OrderPage} op
  * @param {import('@playwright/test').Page} page
  * @param {string} productKey - tên hoặc SKU
@@ -41,7 +40,6 @@ async function addProduct(op, page, productKey, _retry = true) {
   return true;
 }
 
-// A. KÍCH HOẠT LỆNH TẠO ĐƠN
 test.describe('A. Kích hoạt lệnh tạo đơn', () => {
   /** @type {OrderPage} */
   let op;
@@ -60,8 +58,6 @@ test.describe('A. Kích hoạt lệnh tạo đơn', () => {
     await op.setVAT(1, 10);
     await op.setTotalDiscount(10000, 'amount');
   });
-
-  // CO_TC_01
   test(
     'CO_TC_01 - Tạo đơn bán hàng thành công bằng nút nhấn @high @functional',
     async ({ page }) => {
@@ -75,7 +71,6 @@ test.describe('A. Kích hoạt lệnh tạo đơn', () => {
     },
   );
 
-  // CO_TC_02
   test(
     'CO_TC_02 - Tạo đơn bán hàng thành công bằng phím tắt F9 @high @functional',
     async ({ page }) => {
@@ -89,7 +84,6 @@ test.describe('A. Kích hoạt lệnh tạo đơn', () => {
   );
 });
 
-// B. TẠO ĐƠN BÁN HÀNG THẤT BẠI
 test.describe('B. Tạo đơn bán hàng thất bại', () => {
   /** @type {OrderPage} */
   let op;
@@ -99,7 +93,6 @@ test.describe('B. Tạo đơn bán hàng thất bại', () => {
     await op.open();
   });
 
-  // CO_TC_03
   test(
     'CO_TC_03 - Chặn tạo đơn khi danh sách sản phẩm trống @high @negative',
     async () => {
@@ -108,7 +101,6 @@ test.describe('B. Tạo đơn bán hàng thất bại', () => {
     },
   );
 
-  // CO_TC_04
   test(
     'CO_TC_04 - Chặn tạo đơn khi sản phẩm IMEI chưa chọn mã IMEI (SL=0) @high @negative',
     async ({ page }) => {
@@ -122,7 +114,6 @@ test.describe('B. Tạo đơn bán hàng thất bại', () => {
     },
   );
 
-  // CO_TC_05
   test(
     'CO_TC_05 - Chặn tạo đơn khi sản phẩm Lô-HSD chưa chọn lô (SL=0) @high @negative',
     async ({ page }) => {
@@ -137,7 +128,6 @@ test.describe('B. Tạo đơn bán hàng thất bại', () => {
   );
 });
 
-// C. TẠO ĐƠN BÁN HÀNG THÀNH CÔNG
 test.describe('C. Tạo đơn bán hàng thành công', () => {
   /** @type {OrderPage} */
   let op;
@@ -147,7 +137,6 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
     await op.open();
   });
 
-  // CO_TC_06
   test(
     'CO_TC_06 - Tạo đơn sản phẩm thường thành công @high @functional',
     async ({ page }) => {
@@ -171,7 +160,6 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
     },
   );
 
-  // CO_TC_07
   test(
     'CO_TC_07 - Tạo đơn sản phẩm imei thành công @high @functional',
     async ({ page }) => {
@@ -195,7 +183,6 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
     },
   );
 
-  // CO_TC_08 
   test(
     'CO_TC_08 - Tạo đơn sản phẩm Lô-HSD thành công @high @functional',
     async ({ page }) => {
@@ -213,7 +200,6 @@ test.describe('C. Tạo đơn bán hàng thành công', () => {
   );
 });
 
-// D. VERIFY DOANH THU 
 test.describe('D. Verify doanh thu', () => {
   test(
     'CO_TC_09 - Kiểm tra doanh thu ghi nhận sau khi tạo đơn @medium',
@@ -223,7 +209,6 @@ test.describe('D. Verify doanh thu', () => {
   );
 });
 
-// E. XỬ LÝ ĐỒNG THỜI
 test.describe('E. Xử lý đồng thời', () => {
   /** @type {OrderPage} */
   let op;
@@ -233,7 +218,6 @@ test.describe('E. Xử lý đồng thời', () => {
     await op.open();
   });
 
-  //  CO_TC_10
   test(
     'CO_TC_10 - Nhấn "Tạo đơn" liên tục nhiều lần — hệ thống chỉ xử lý 1 lần @high @functional',
     async ({ page }) => {
@@ -263,7 +247,6 @@ test.describe('E. Xử lý đồng thời', () => {
     },
   );
 
-  // CO_TC_11
   test.skip(
     'CO_TC_11 - Mất kết nối internet khi nhấn "Tạo đơn" @high @negative',
     async ({ page, context }) => {

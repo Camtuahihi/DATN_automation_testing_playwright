@@ -54,7 +54,6 @@ function near(actual, expected, tolerance = 2) {
   return Math.abs(actual - expected) <= tolerance;
 }
 
-//A. HIỂN THỊ ĐẶC THÙ THEO LOẠI SẢN PHẨM
 test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
   /** @type {OrderPage} */
   let op;
@@ -64,7 +63,6 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
     await op.open();
   });
 
-  //OR_TC_01
   test(
     'OR_TC_01 - Dòng sản phẩm Thường hiển thị đủ: Tên, SKU, Đơn giá, SL=1, CK, VAT, Thành tiền @high @ui',
     async ({ page }) => {
@@ -92,7 +90,6 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
     },
   );
 
-  //OR_TC_05
   test(
     'OR_TC_02 - Dòng sản phẩm IMEI hiển thị Danh sách IMEI, SL=0 @high @ui',
     async () => {
@@ -100,7 +97,6 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
     },
   );
 
-  // OR_TC_03
   test(
     'OR_TC_03 - Dòng sản phẩm Lô-HSD hiển thị Danh sách lô hàng, SL=0 @high @ui',
     async () => {
@@ -108,7 +104,6 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
     },
   );
 
-  //OR_TC_04 
   test(
     'OR_TC_04 - Sản phẩm có VAT hiển thị label "(Sản phẩm có áp dụng VAT)" cạnh tên @medium @ui',
     async ({ page }) => {
@@ -120,10 +115,28 @@ test.describe('A. Hiển thị đặc thù theo loại sản phẩm', () => {
   );
 });
 
-//B. SỐ LƯỢNG
 test.describe('B. Số lượng', () => {
   /** @type {OrderPage} */
   let op;
+
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
 
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
@@ -133,35 +146,41 @@ test.describe('B. Số lượng', () => {
     await op.getOrderRow(0).waitFor({ state: 'visible', timeout: 8000 });
   });
 
-  //OR_TC_05 
   test(
     'OR_TC_05 - Tăng số lượng bằng nút (+) @high @functional',
     async () => {
       expect(await op.getRowQty(0)).toBe(1);
       await op.clickPlus(0);
-      expect(await op.getRowQty(0)).toBe(2);
+      
+      const expectedQty = 2;
+      expect(await op.getRowQty(0)).toBe(expectedQty);
 
-      const subtotal = await op.getRowSubtotalText(0);
-      expect(subtotal).toMatch(/300[.,]?000/);
+      // Thành tiền dòng = Đơn giá x Số lượng
+      const expectedSubtotal = P.DEN.price * expectedQty;
+
+      const subtotalText = await op.getRowSubtotalText(0);
+      const actualSubtotal = parseMoneyToFloat(subtotalText);
+      expect(Math.abs(actualSubtotal - expectedSubtotal)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  //OR_TC_06 
   test(
     'OR_TC_06 - Giảm số lượng bằng nút (-) @high @functional',
     async () => {
-      await op.clickPlus(0); // đưa SL về 2
+      await op.clickPlus(0);
       expect(await op.getRowQty(0)).toBe(2);
 
       await op.clickMinus(0);
-      expect(await op.getRowQty(0)).toBe(1);
+      const expectedQty = 1;
+      expect(await op.getRowQty(0)).toBe(expectedQty);
+      const expectedSubtotal = P.DEN.price * expectedQty;
 
-      const subtotal = await op.getRowSubtotalText(0);
-      expect(subtotal).toMatch(/150[.,]?000/);
+      const subtotalText = await op.getRowSubtotalText(0);
+      const actualSubtotal = parseMoneyToFloat(subtotalText);
+      expect(Math.abs(actualSubtotal - expectedSubtotal)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  //OR_TC_07 
   test(
     'OR_TC_07 - Nút (-) bị disable khi Số lượng = 1 @medium @functional',
     async () => {
@@ -171,19 +190,20 @@ test.describe('B. Số lượng', () => {
     },
   );
 
-  //OR_TC_08 
   test(
     'OR_TC_08 - Nhập số nguyên dương tại ô Số lượng @high @functional',
     async () => {
       await op.setQuantity(0, 3);
       expect(await op.getRowQty(0)).toBe(3);
 
-      const subtotal = await op.getRowSubtotalText(0);
-      expect(subtotal).toMatch(/450[.,]?000/);
+      const expectedSubtotal = P.DEN.price * 3;
+
+      const subtotalText = await op.getRowSubtotalText(0);
+      const actualSubtotal = parseMoneyToFloat(subtotalText);
+      expect(Math.abs(actualSubtotal - expectedSubtotal)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  //OR_TC_09 
   test(
     'OR_TC_09 - Chặn nhập số âm tại ô Số lượng "-" @medium @negative',
     async ({ page }) => {
@@ -208,7 +228,6 @@ test.describe('C. Tồn kho', () => {
     await op.open();
   });
 
-  // OR_TC_10 
   test(
     'OR_TC_10 - Chặn thêm SP không bán âm khi Có thể bán = 0 @high @negative',
     async ({ page }) => {
@@ -226,7 +245,6 @@ test.describe('C. Tồn kho', () => {
     },
   );
 
-  //OR_TC_11
   test(
     'OR_TC_11 - Chặn nhập SL > Tồn kho cho SP không bán âm (tồn kho=1, nhập SL=2) @high @negative',
     async ({ page }) => {
@@ -238,7 +256,6 @@ test.describe('C. Tồn kho', () => {
     },
   );
 
-  //OR_TC_12 
   test(
     'OR_TC_12 - Cho phép bán SP bán âm với SL > Tồn kho (Gỗ đỏ, tồn=0, SL=2) @high @functional',
     async ({ page }) => {
@@ -259,91 +276,153 @@ test.describe('C. Tồn kho', () => {
   );
 });
 
-//D. CHIẾT KHẤU DÒNG 
 test.describe('D. Chiết khấu dòng', () => {
   /** @type {OrderPage} */
   let op;
+
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
 
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
   });
 
-  //OR_TC_13 
   test(
     'OR_TC_13 - Nhập CK dòng theo số tiền (đ) @high @functional',
     async ({ page }) => {
-      const ok = await addProduct(op, page, P.HOA_MAI.name);
-      if (!ok) test.skip(true, `Không tìm thấy "${P.HOA_MAI.name}"`);
+      const product = P.HOA_MAI; 
+      const ok = await addProduct(op, page, product.name);
+      if (!ok) test.skip(true, `Không tìm thấy "${product.name}"`);
 
-      await op.setLineDiscount(0, 10000, 'amount');
-      const subtotal = await op.getRowSubtotalText(0);
-      expect(subtotal).toMatch(/90[.,]?000/);
+      const discountAmount = 10000;
+      const quantity = 1;
+
+      await op.setLineDiscount(0, discountAmount, 'amount');
+
+      //Tiền sau CK dòng = Đơn giá x Số lượng - CK dòng
+      const expectedSubtotal = (product.price * quantity) - discountAmount;
+
+      const subtotalText = await op.getRowSubtotalText(0);
+      const actualSubtotal = parseMoneyToFloat(subtotalText);
+
+      expect(Math.abs(actualSubtotal - expectedSubtotal)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // OR_TC_14
   test(
     'OR_TC_14 - Nhập CK dòng theo phần trăm (%) @high @functional',
     async ({ page }) => {
-      const ok = await addProduct(op, page, P.HOA_DAO.name);
-      if (!ok) test.skip(true, `Không tìm thấy "${P.HOA_DAO.name}"`);
+      const product = P.HOA_DAO;
+      const ok = await addProduct(op, page, product.name);
+      if (!ok) test.skip(true, `Không tìm thấy "${product.name}"`);
 
-      await op.setLineDiscount(0, 10, 'percent');
-      const subtotal = await op.getRowSubtotalText(0);
-      expect(subtotal).toMatch(/180[.,]?000/);
+      const discountPercent = 10;
+      const quantity = 1;
+
+      await op.setLineDiscount(0, discountPercent, 'percent');
+
+      //Tiền sau CK dòng = (Đơn giá x SL) - (Đơn giá x SL x CK% / 100)
+      const expectedLineDiscount = (product.price * quantity) * (discountPercent / 100);
+      const expectedSubtotal = (product.price * quantity) - expectedLineDiscount;
+
+      const subtotalText = await op.getRowSubtotalText(0);
+      const actualSubtotal = parseMoneyToFloat(subtotalText);
+
+      expect(Math.abs(actualSubtotal - expectedSubtotal)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  //OR_TC_15 
   test(
     'OR_TC_15 - CK dòng dạng đ không được lớn hơn Đơn giá: báo lỗi @high @boundary',
     async ({ page }) => {
-      const ok = await addProduct(op, page, P.COC.name);
-      if (!ok) test.skip(true, `Không tìm thấy "${P.COC.name}"`);
+      const product = P.COC;
+      const ok = await addProduct(op, page, product.name);
+      if (!ok) test.skip(true, `Không tìm thấy "${product.name}"`);
 
-      await op.setLineDiscount(0, 60000, 'amount');
+      const invalidDiscount = product.price + 10000;
+
+      await op.setLineDiscount(0, invalidDiscount, 'amount');
       await op.expectToastContains('lớn hơn đơn giá sản phẩm');
     },
   );
 
-  //OR_TC_16 
   test(
     'OR_TC_16 - CK dòng dạng % không được vượt quá 100: báo lỗi @high @boundary',
     async ({ page }) => {
-      const ok = await addProduct(op, page, P.COC.name);
-      if (!ok) test.skip(true, `Không tìm thấy "${P.COC.name}"`);
+      const product = P.COC;
+      const ok = await addProduct(op, page, product.name);
+      if (!ok) test.skip(true, `Không tìm thấy "${product.name}"`);
 
       await op.setLineDiscount(0, 120, 'percent');
       await op.expectToastContains('lớn hơn 100%');
     },
   );
 
-  //OR_TC_17 
   test(
     'OR_TC_17 - CK dòng dạng % với biên 100 - hợp lệ @medium @boundary',
     async ({ page }) => {
-      const ok = await addProduct(op, page, P.COC.name);
-      if (!ok) test.skip(true, `Không tìm thấy "${P.COC.name}"`);
+      const product = P.COC;
+      const ok = await addProduct(op, page, product.name);
+      if (!ok) test.skip(true, `Không tìm thấy "${product.name}"`);
 
       await op.setLineDiscount(0, 100, 'percent');
-      const subtotal = await op.getRowSubtotalText(0);
-      expect(subtotal).toMatch(/Thành tiền\s+0[\s\Wđ]/);
+      
+      const expectedSubtotal = 0;
+
+      const subtotalText = await op.getRowSubtotalText(0);
+      const actualSubtotal = parseMoneyToFloat(subtotalText);
+
+      expect(Math.abs(actualSubtotal - expectedSubtotal)).toBeLessThanOrEqual(0.1);
     },
   );
 });
 
-//E. CHIẾT KHẤU TỔNG ĐƠN 
 test.describe('E. Chiết khấu tổng đơn', () => {
   /** @type {OrderPage} */
   let op;
+
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
 
   /** @param {import('@playwright/test').Page} page */
   async function addTwoProducts(page) {
     op = new OrderPage(page);
     await op.open();
-    const ok1 = await addProduct(op, page, P.DEN.name);  // DEN thêm trước → row 1
-    const ok2 = await addProduct(op, page, P.COC.name);  // COC thêm sau  → row 0
+    const ok1 = await addProduct(op, page, P.DEN.name); 
+    const ok2 = await addProduct(op, page, P.COC.name);  
     if (!ok1 || !ok2) {
       test.skip(true, `Cần cả "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
     }
@@ -351,47 +430,79 @@ test.describe('E. Chiết khấu tổng đơn', () => {
     await op.setVAT(1, 0);
   }
 
-  //OR_TC_18 
   test(
     'OR_TC_18 - Áp dụng CK tổng dạng tiền (đ) @high @functional',
     async ({ page }) => {
       await addTwoProducts(page);
-      await op.setTotalDiscount(40000, 'amount');
+      
+      const totalDiscountAmount = 40000; 
+      await op.setTotalDiscount(totalDiscountAmount, 'amount');
 
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 160000, 100)).toBe(true);
-      const finalCoc = await op.getRowFinalText(0);
-      expect(finalCoc).toMatch(/40[.,]?000/);
+      const p0_subtotal = P.COC.price * 1; 
+      const p1_subtotal = P.DEN.price * 1;
+      const totalSubtotal = p0_subtotal + p1_subtotal;
 
-      const finalDen = await op.getRowFinalText(1);
-      expect(finalDen).toMatch(/120[.,]?000/);
+      const p0_rate = p0_subtotal / totalSubtotal;
+      const p1_rate = p1_subtotal / totalSubtotal;
+
+      const p0_allocatedDiscount = totalDiscountAmount * p0_rate;
+      const p1_allocatedDiscount = totalDiscountAmount * p1_rate;
+
+      const expectedFinalCoc = p0_subtotal - p0_allocatedDiscount;
+      const expectedFinalDen = p1_subtotal - p1_allocatedDiscount;
+      const expectedMustPay = totalSubtotal - totalDiscountAmount;
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
+
+      const finalCocText = await op.getRowFinalText(0);
+      const actualFinalCoc = parseMoneyToFloat(finalCocText);
+      expect(Math.abs(actualFinalCoc - expectedFinalCoc)).toBeLessThanOrEqual(0.1);
+
+      const finalDenText = await op.getRowFinalText(1);
+      const actualFinalDen = parseMoneyToFloat(finalDenText);
+      expect(Math.abs(actualFinalDen - expectedFinalDen)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // OR_TC_19 
   test(
     'OR_TC_19 - Áp dụng CK tổng dạng phần trăm (%) @high @functional',
     async ({ page }) => {
       await addTwoProducts(page);
-      await op.setTotalDiscount(10, 'percent');
+      
+      const discountPercent = 10;
+      await op.setTotalDiscount(discountPercent, 'percent');
 
-      // KH phải trả = 200.000 × (1-10%) = 180.000
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 180000, 100)).toBe(true);
+      const p0_subtotal = P.COC.price * 1;
+      const p1_subtotal = P.DEN.price * 1;
+      const totalSubtotal = p0_subtotal + p1_subtotal;
+
+      const expectedDiscountAmount = totalSubtotal * (discountPercent / 100);
+      const expectedMustPay = totalSubtotal - expectedDiscountAmount;
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  //OR_TC_20 
   test(
     'OR_TC_20 - Chặn CK tổng đ > Tổng tiền hàng: báo lỗi @high @boundary',
     async ({ page }) => {
       await addTwoProducts(page);
-      await op.setTotalDiscount(210000, 'amount');
+
+      const p0_subtotal = P.COC.price * 1;
+      const p1_subtotal = P.DEN.price * 1;
+      
+      const invalidTotalDiscount = (p0_subtotal + p1_subtotal) + 10000;
+
+      await op.setTotalDiscount(invalidTotalDiscount, 'amount');
       await op.expectToastContains('lớn hơn giá trị đơn hàng');
     },
   );
 
-  // OR_TC_21
   test(
     'OR_TC_21 - Chặn CK tổng % > 100: báo lỗi @medium @boundary',
     async ({ page }) => {
@@ -402,50 +513,91 @@ test.describe('E. Chiết khấu tổng đơn', () => {
   );
 });
 
-// G. ÁP DỤNG VAT
 test.describe('G. Áp dụng VAT', () => {
   /** @type {OrderPage} */
   let op;
 
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
+
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    const ok1 = await addProduct(op, page, P.DEN.name);
-    const ok2 = await addProduct(op, page, P.COC.name);
+    const ok1 = await addProduct(op, page, P.DEN.name); 
+    const ok2 = await addProduct(op, page, P.COC.name); 
     if (!ok1 || !ok2) {
-      test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
+      test.skip(true, `Cần "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
     }
+    await op.setTotalDiscount(0, 'amount');
   });
 
-  //OR_TC_22 
   test(
     'OR_TC_22 - Áp dụng VAT cho 2 sản phẩm - không CK @high @functional',
     async () => {
-      await op.setVAT(0, 5);   // Cốc sứ
-      await op.setVAT(1, 10);  // Đèn
-      const totalVAT = await op.getSidebarTotalVAT();
-      expect(near(totalVAT, 17500, 100)).toBe(true);
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 217500, 100)).toBe(true);
+      const vatCoc = 5;  
+      const vatDen = 10; 
+
+      await op.setVAT(0, vatCoc);   
+      await op.setVAT(1, vatDen);  
+
+      //Tiền sau cả 2 CK = Đơn giá x Số lượng
+      const p0_finalPrice = P.COC.price * 1;
+      const p1_finalPrice = P.DEN.price * 1;
+
+      //VAT dòng = Tiền sau cả 2 CK × VAT% / 100
+      const expectedVatCoc = p0_finalPrice * (vatCoc / 100);
+      const expectedVatDen = p1_finalPrice * (vatDen / 100);
+
+      //Tổng VAT = Σ VAT dòng
+      const expectedTotalVAT = expectedVatCoc + expectedVatDen;
+
+      //Khách phải trả = Σ Tiền sau cả 2 CK + Σ VAT dòng
+      const expectedMustPay = (p0_finalPrice + p1_finalPrice) + expectedTotalVAT;
+
+      const totalVATText = await op.getSidebarTotalVAT();
+      expect(parseMoneyToFloat(totalVATText)).toBe(expectedTotalVAT);
+
+      const mustPayText = await op.getSidebarMustPay();
+      expect(parseMoneyToFloat(mustPayText)).toBe(expectedMustPay);
     },
   );
 
-  // OR_TC_23
   test(
     'OR_TC_23 - VAT biên trên 100% và biên dưới 0% @medium @boundary',
     async () => {
       await op.setVAT(0, 0);
       await op.setVAT(1, 0);
-      const vatZero = await op.getSidebarTotalVAT();
-      expect(vatZero).toBe(0);
+      
+      const vatZeroText = await op.getSidebarTotalVAT();
+      expect(parseMoneyToFloat(vatZeroText)).toBe(0);
 
-      await op.setVAT(0, 100);
-      const vat100 = await op.getSidebarTotalVAT();
-      expect(near(vat100, 50000, 500)).toBe(true);
+      const vatMax = 100;
+      await op.setVAT(0, vatMax);
+
+      // VAT Cốc = Tiền Cốc * 100% = Chính giá tiền Cốc
+      const expectedVatMax = P.COC.price * 1 * (vatMax / 100);
+
+      const vatMaxText = await op.getSidebarTotalVAT();
+      expect(parseMoneyToFloat(vatMaxText)).toBe(expectedVatMax);
     },
   );
 
-  // OR_TC_24
   test(
     'OR_TC_24 - Chặn VAT > 100% @medium @boundary',
     async () => {
@@ -455,120 +607,252 @@ test.describe('G. Áp dụng VAT', () => {
   );
 });
 
-// H. KẾT HỢP CK DÒNG + CK TỔNG + VAT
 test.describe('H. Kết hợp CK dòng + CK tổng + VAT', () => {
   /** @type {OrderPage} */
   let op;
+
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
 
   /** @param {import('@playwright/test').Page} page */
   async function setupTwoProducts(page) {
     op = new OrderPage(page);
     await op.open();
-    const ok1 = await addProduct(op, page, P.DEN.name);
-    const ok2 = await addProduct(op, page, P.COC.name);
+    const ok1 = await addProduct(op, page, P.DEN.name); 
+    const ok2 = await addProduct(op, page, P.COC.name); 
     if (!ok1 || !ok2) {
-      test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
+      test.skip(true, `Cần "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
     }
   }
 
-  //OR_TC_25
   test(
     'OR_TC_25 - Áp dụng CK dòng đ + CK tổng đ + VAT @high @functional',
     async ({ page }) => {
       await setupTwoProducts(page);
-  
-      await op.setLineDiscount(0, 5000, 'amount');
-      await op.setVAT(0, 5);
    
-      await op.setLineDiscount(1, 10000, 'amount');
-      await op.setVAT(1, 10);
-      await op.setTotalDiscount(10000, 'amount');
+      const p0_lineDiscAmount = 5000;
+      const p0_vatPercent = 5;
+      const p1_lineDiscAmount = 10000;
+      const p1_vatPercent = 10;
+      const totalDiscountAmount = 10000;
 
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 190372, 500)).toBe(true);
+      await op.setLineDiscount(0, p0_lineDiscAmount, 'amount');
+      await op.setVAT(0, p0_vatPercent);
+      await op.setLineDiscount(1, p1_lineDiscAmount, 'amount');
+      await op.setVAT(1, p1_vatPercent);
+      await op.setTotalDiscount(totalDiscountAmount, 'amount');
 
-      const finalCoc = await op.getRowFinalText(0);
-      expect(finalCoc).toMatch(/44[.,]?69[0-9]/);
+      //Tiền sau CK dòng
+      const p0_subtotal = (P.COC.price * 1) - p0_lineDiscAmount; 
+      const p1_subtotal = (P.DEN.price * 1) - p1_lineDiscAmount; 
+
+      //Tổng tiền sau CK dòng
+      const totalSubtotal = p0_subtotal + p1_subtotal; 
+
+      //CK tổng phân bổ giữ nguyên số thập phân
+      const p0_allocatedDiscount = totalDiscountAmount * (p0_subtotal / totalSubtotal); 
+      const p1_allocatedDiscount = totalDiscountAmount * (p1_subtotal / totalSubtotal); 
+
+      //Tiền sau cả 2 CK
+      const p0_afterBothDiscount = p0_subtotal - p0_allocatedDiscount;
+      const p1_afterBothDiscount = p1_subtotal - p1_allocatedDiscount;
+
+      //VAT dòng
+      const p0_vat = p0_afterBothDiscount * (p0_vatPercent / 100);
+      const p1_vat = p1_afterBothDiscount * (p1_vatPercent / 100);
+
+      //Tổng cuối dòng của Cốc (row 0)
+      const expectedFinalCoc = p0_afterBothDiscount + p0_vat;
+
+      //Khách phải trả
+      const expectedMustPay = p0_afterBothDiscount + p1_afterBothDiscount + p0_vat + p1_vat;
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
+
+      const finalCocText = await op.getRowFinalText(0);
+      const actualFinalCoc = parseMoneyToFloat(finalCocText);
+      expect(Math.abs(actualFinalCoc - expectedFinalCoc)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // ── OR_TC_26 ──────────────────────────────────────────────────────────────
   test(
     'OR_TC_26 - Áp dụng CK dòng % + CK tổng đ + VAT @high @functional',
     async ({ page }) => {
       await setupTwoProducts(page);
-      await op.setLineDiscount(0, 5, 'percent');
-      await op.setVAT(0, 5);
-      await op.setLineDiscount(1, 10, 'percent');
-      await op.setVAT(1, 10);
-      await op.setTotalDiscount(10000, 'amount');
+      
+      const p0_lineDiscPercent = 5;
+      const p0_vatPercent = 5;
+      const p1_lineDiscPercent = 10;
+      const p1_vatPercent = 10;
+      const totalDiscountAmount = 10000;
 
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 187505, 500)).toBe(true);
+      await op.setLineDiscount(0, p0_lineDiscPercent, 'percent');
+      await op.setVAT(0, p0_vatPercent);
+      await op.setLineDiscount(1, p1_lineDiscPercent, 'percent');
+      await op.setVAT(1, p1_vatPercent);
+      await op.setTotalDiscount(totalDiscountAmount, 'amount');
+
+      const p0_subtotal = (P.COC.price * 1) * (1 - p0_lineDiscPercent / 100);
+      const p1_subtotal = (P.DEN.price * 1) * (1 - p1_lineDiscPercent / 100);
+      const totalSubtotal = p0_subtotal + p1_subtotal;
+
+      const p0_afterBothDiscount = p0_subtotal - (totalDiscountAmount * (p0_subtotal / totalSubtotal));
+      const p1_afterBothDiscount = p1_subtotal - (totalDiscountAmount * (p1_subtotal / totalSubtotal));
+
+      const expectedMustPay = p0_afterBothDiscount * (1 + p0_vatPercent / 100) + 
+                              p1_afterBothDiscount * (1 + p1_vatPercent / 100);
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // ── OR_TC_27 ──────────────────────────────────────────────────────────────
   test(
     'OR_TC_27 - Áp dụng CK dòng đ + CK tổng % + VAT @high @functional',
     async ({ page }) => {
       await setupTwoProducts(page);
-      await op.setLineDiscount(0, 5000, 'amount');
-      await op.setVAT(0, 5);
-      await op.setLineDiscount(1, 10000, 'amount');
-      await op.setVAT(1, 10);
-      await op.setTotalDiscount(10, 'percent');
+      
+      const p0_lineDiscAmount = 5000;
+      const p0_vatPercent = 5;
+      const p1_lineDiscAmount = 10000;
+      const p1_vatPercent = 10;
+      const totalDiscountPercent = 10;
 
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 181125, 500)).toBe(true);
+      await op.setLineDiscount(0, p0_lineDiscAmount, 'amount');
+      await op.setVAT(0, p0_vatPercent);
+      await op.setLineDiscount(1, p1_lineDiscAmount, 'amount');
+      await op.setVAT(1, p1_vatPercent);
+      await op.setTotalDiscount(totalDiscountPercent, 'percent');
+
+      const p0_subtotal = (P.COC.price * 1) - p0_lineDiscAmount;
+      const p1_subtotal = (P.DEN.price * 1) - p1_lineDiscAmount;
+      const totalSubtotal = p0_subtotal + p1_subtotal;
+
+      const totalDiscountAmount = totalSubtotal * (totalDiscountPercent / 100);
+
+      const p0_afterBothDiscount = p0_subtotal - (totalDiscountAmount * (p0_subtotal / totalSubtotal));
+      const p1_afterBothDiscount = p1_subtotal - (totalDiscountAmount * (p1_subtotal / totalSubtotal));
+
+      const expectedMustPay = p0_afterBothDiscount * (1 + p0_vatPercent / 100) + 
+                              p1_afterBothDiscount * (1 + p1_vatPercent / 100);
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // ── OR_TC_28 ──────────────────────────────────────────────────────────────
   test(
     'OR_TC_28 - Áp dụng CK dòng % + CK tổng % + VAT @high @functional',
     async ({ page }) => {
       await setupTwoProducts(page);
-      await op.setLineDiscount(0, 5, 'percent');
-      await op.setVAT(0, 5);
-      await op.setLineDiscount(1, 10, 'percent');
-      await op.setVAT(1, 10);
-      await op.setTotalDiscount(10, 'percent');
+      
+      const p0_lineDiscPercent = 5;
+      const p0_vatPercent = 5;
+      const p1_lineDiscPercent = 10;
+      const p1_vatPercent = 10;
+      const totalDiscountPercent = 10;
 
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 178538, 500)).toBe(true);
+      await op.setLineDiscount(0, p0_lineDiscPercent, 'percent');
+      await op.setVAT(0, p0_vatPercent);
+      await op.setLineDiscount(1, p1_lineDiscPercent, 'percent');
+      await op.setVAT(1, p1_vatPercent);
+      await op.setTotalDiscount(totalDiscountPercent, 'percent');
+
+      const p0_subtotal = (P.COC.price * 1) * (1 - p0_lineDiscPercent / 100);
+      const p1_subtotal = (P.DEN.price * 1) * (1 - p1_lineDiscPercent / 100);
+      const totalSubtotal = p0_subtotal + p1_subtotal;
+
+      const totalDiscountAmount = totalSubtotal * (totalDiscountPercent / 100);
+
+      const p0_afterBothDiscount = p0_subtotal - (totalDiscountAmount * (p0_subtotal / totalSubtotal));
+      const p1_afterBothDiscount = p1_subtotal - (totalDiscountAmount * (p1_subtotal / totalSubtotal));
+
+      const expectedMustPay = p0_afterBothDiscount * (1 + p0_vatPercent / 100) + 
+                              p1_afterBothDiscount * (1 + p1_vatPercent / 100);
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
     },
   );
 });
 
-// I. CHI PHÍ KHÁC
 test.describe('I. Chi phí khác', () => {
   /** @type {OrderPage} */
   let op;
 
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
+
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    const ok1 = await addProduct(op, page, P.DEN.name);
-    const ok2 = await addProduct(op, page, P.COC.name);
-    if (!ok1 || !ok2) test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
+    const ok1 = await addProduct(op, page, P.DEN.name); 
+    const ok2 = await addProduct(op, page, P.COC.name); 
+    if (!ok1 || !ok2) {
+      test.skip(true, `Cần "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
+    }
     await op.setVAT(0, 0);
     await op.setVAT(1, 0);
+    await op.setTotalDiscount(0, 'amount');
   });
 
-  //OR_TC_29
   test(
     'OR_TC_29 - Áp dụng "Chi phí khác" @high @functional',
     async () => {
-      await op.setAdditionalCost(10000);
+      const additionalCost = 10000;
+      await op.setAdditionalCost(additionalCost);
 
-      // KH phải trả = 200.000 + 0 VAT - 0 CK + 10.000 = 210.000
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 210000, 200)).toBe(true);
+      const p0_subtotal = P.COC.price * 1;
+      const p1_subtotal = P.DEN.price * 1;
+      const totalSubtotal = p0_subtotal + p1_subtotal;
+
+      //Khách phải trả = Σ Tổng cuối dòng + Chi phí khác
+      const expectedMustPay = totalSubtotal + additionalCost;
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // OR_TC_30 
   test(
     'OR_TC_30 - Chặn nhập Chi phí khác âm @low @negative',
     async ({ page }) => {
@@ -588,111 +872,169 @@ test.describe('I. Chi phí khác', () => {
   );
 });
 
-// J. TIỀN KHÁCH ĐƯA 
-
 test.describe('J. Tiền khách đưa', () => {
   /** @type {OrderPage} */
   let op;
 
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
+
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    const ok1 = await addProduct(op, page, P.DEN.name);
-    const ok2 = await addProduct(op, page, P.COC.name);
-    if (!ok1 || !ok2) test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
+    const ok1 = await addProduct(op, page, P.DEN.name); // DEN thêm trước → row 1
+    const ok2 = await addProduct(op, page, P.COC.name); // COC thêm sau  → row 0
+    if (!ok1 || !ok2) test.skip(true, `Cần "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
+
     await op.setVAT(0, 0);
     await op.setVAT(1, 0);
+    await op.setTotalDiscount(0, 'amount');
   });
 
-  // ── OR_TC_31 ──────────────────────────────────────────────────────────────
   test(
     'OR_TC_31 - Tiền thừa khi khách đưa nhiều hơn @high @functional',
     async () => {
-      await op.setCustomerPayment(250000);
+      const customerPayment = 250000;
+      await op.setCustomerPayment(customerPayment);
 
-      const change = await op.getSidebarChange();
-      expect(near(change, 50000, 200)).toBe(true);
+      const p0_subtotal = P.COC.price * 1;
+      const p1_subtotal = P.DEN.price * 1;
+      
+      //Khách phải trả
+      const expectedMustPay = p0_subtotal + p1_subtotal; 
+      //Tiền thừa trả khách = Tiền khách đưa - Khách phải trả
+      const expectedChange = customerPayment - expectedMustPay;
+
+      const changeText = await op.getSidebarChange();
+      const actualChange = parseMoneyToFloat(changeText);
+      
+      expect(Math.abs(actualChange - expectedChange)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // OR_TC_32 
   test(
     'OR_TC_32 - Tiền thừa = 0 khi khách đưa đúng @medium @functional',
     async () => {
-      await op.setCustomerPayment(200000);
+      const p0_subtotal = P.COC.price * 1;
+      const p1_subtotal = P.DEN.price * 1;
+      const expectedMustPay = p0_subtotal + p1_subtotal; 
 
-      const change = await op.getSidebarChange();
-      expect(change).toBe(0);
+      await op.setCustomerPayment(expectedMustPay);
+
+      const changeText = await op.getSidebarChange();
+      const actualChange = parseMoneyToFloat(changeText);
+
+      expect(actualChange).toBe(0);
     },
   );
 
-  // OR_TC_33 
   test(
     'OR_TC_33 - Tiền khách đưa < KH phải trả @medium @functional',
     async ({ page }) => {
       await op.setCustomerPayment(150000);
       await page.waitForTimeout(300);
-
-      // Tiền thừa không được hiển thị (hoặc = 0) khi đưa thiếu
       const changeEl = page.locator('[class*="tien-thua"], [class*="change"]').filter({ hasText: /\d/ });
       if (await changeEl.count() > 0) {
-        const change = await op.getSidebarChange();
-        expect(change).toBe(0);
+        const changeText = await op.getSidebarChange();
+        const actualChange = parseMoneyToFloat(changeText);
+        expect(actualChange).toBe(0);
       }
       await expect(page.locator('[class*="sidebar"], [class*="order-summary"]').first()).toBeVisible();
     },
   );
 });
 
-// K. THAO TÁC DÒNG HÀNG 
 test.describe('K. Thao tác dòng hàng', () => {
   /** @type {OrderPage} */
   let op;
 
+  /**
+   * @param {string | number} text
+   * @returns {number}
+   */
+  function parseMoneyToFloat(text) {
+    if (typeof text === 'number') return text;
+    if (!text) return 0;
+
+    const match = String(text).match(/([\d.,]+)\s*[đĐ]?$/);
+    if (!match) return 0;
+
+    let numStr = match[1];
+
+    numStr = numStr.replace(/\./g, '');
+    numStr = numStr.replace(/,/g, '.');
+
+    return parseFloat(numStr);
+  }
+
   test.beforeEach(async ({ page }) => {
     op = new OrderPage(page);
     await op.open();
-    const ok1 = await addProduct(op, page, P.DEN.name);
-    const ok2 = await addProduct(op, page, P.COC.name);
-    if (!ok1 || !ok2) test.skip(true, 'Cần "Cốc sứ" và "Đèn Rạng Đông"');
+    const ok1 = await addProduct(op, page, P.DEN.name); 
+    const ok2 = await addProduct(op, page, P.COC.name); 
+    if (!ok1 || !ok2) test.skip(true, `Cần "${P.COC.name}" và "${P.DEN.name}" trong môi trường test`);
+
     await op.setVAT(0, 0);
     await op.setVAT(1, 0);
+    await op.setTotalDiscount(0, 'amount');
   });
 
-  // OR_TC_34 
   test(
     'OR_TC_34 - Xóa sản phẩm khỏi đơn @high @functional',
-    async ({ page }) => {
+    async () => {
       expect(await op.getOrderRowCount()).toBe(2);
 
       await op.deleteRow(1);
-
       await expect(op.orderRows).toHaveCount(1, { timeout: 5000 });
 
-      // KH phải trả cập nhật về 50.000 (chỉ còn Cốc sứ)
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 50000, 200)).toBe(true);
+      const expectedMustPay = P.COC.price * 1;
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
     },
   );
 
-  // OR_TC_35 
   test(
     'OR_TC_35 - Sửa Đơn giá trực tiếp trên dòng @high @functional',
     async () => {
-      await op.setPrice(0, 15000);
+      const newPriceCoc = 15000;
+      const quantity = 1;
+      await op.setPrice(0, newPriceCoc);
 
-      const subtotal = await op.getRowSubtotalText(0);
-      expect(subtotal).toMatch(/15[.,]?000/);
+      const expectedSubtotalCoc = newPriceCoc * quantity;
+  
+      //Khách phải trả = Thành tiền dòng Cốc mới + Thành tiền dòng Đèn cũ
+      const expectedMustPay = expectedSubtotalCoc + (P.DEN.price * 1);
 
-      const mustPay = await op.getSidebarMustPay();
-      expect(near(mustPay, 165000, 500)).toBe(true);
+      const subtotalText = await op.getRowSubtotalText(0);
+      const actualSubtotalCoc = parseMoneyToFloat(subtotalText);
+      expect(Math.abs(actualSubtotalCoc - expectedSubtotalCoc)).toBeLessThanOrEqual(0.1);
+
+      const mustPayText = await op.getSidebarMustPay();
+      const actualMustPay = parseMoneyToFloat(mustPayText);
+      expect(Math.abs(actualMustPay - expectedMustPay)).toBeLessThanOrEqual(0.1);
     },
   );
 });
 
-// ─── L. CASE ĐẶC THÙ — IMEI / LÔ-HSD 
 test.describe('L. Case đặc thù — Lô-HSD', () => {
-  // ── OR_TC_36 
   test(
     'OR_TC_36 - Lô-HSD: nhập "Số lượng bán" > Tồn kho lô → báo "Số lượng bán nhiều hơn tồn kho" @high @negative',
     async ({ page }) => {
